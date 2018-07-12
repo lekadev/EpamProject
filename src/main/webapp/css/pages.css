@@ -1,0 +1,335 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+	background-color: white;
+	font-family: 'Trebuchet MS', 'Calibri';
+}
+
+#header {
+    font-family: 'Monotype Corsiva';
+    font-size: 100px;
+    color: white;
+	text-align: center;
+}
+
+#content {
+    background-color: white;
+    width: 1000px;
+    margin-left: auto;
+    min-height: 450px;;
+    margin-right: auto;
+    font-family: inherit;
+    clear: both;
+    position: relative;
+}
+
+#footer {
+    background-color: brown;
+    height: 75px;
+    width: 100%;
+    color: white;
+    font-size: 20px;
+    font-family: 'Arial';
+    position: absolute;
+}
+
+#author {
+    margin: auto;
+    text-align: center;
+    font-size: 17px;
+}
+
+#copyright{
+    font-family: 'Times New Roman';
+    font-size: 17px;
+    margin-left: 10px;
+}
+
+select {
+    font-family: Calibri;
+    font-size: 20px;
+}
+
+
+#quote {
+    margin-top: 5px;
+    text-align: center;
+}
+
+#new-account {
+    margin: auto;
+	width: 400px;
+	text-align: center;
+	margin-top: 10px;
+}
+#choose-lang {
+    font-family: Calibri;
+    font-size: 20px;
+    text-align: center;
+    margin: auto;
+    width: 400px;
+}
+
+#choose-lang  select{
+    font-family: Calibri;
+    font-size: 20px;
+}
+#login-container{
+	padding-top: 50px;
+}
+
+#login-container *{
+	margin-bottom: 10px;
+}
+#wrap-login-form {
+	border: 2px solid brown;
+	border-radius: 25px;
+	width: 450px;
+	height: 250px;
+	margin: auto;
+	font-family: inherit;
+	position: relative;
+}
+
+#login-form {
+	margin:auto;
+	text-align: center;
+}
+
+#login-form  *{
+	margin:auto;
+}
+
+#wrap-input{
+	margin: 10px;
+}
+
+#sign-in-btn  button {
+	width: 175px;
+	font-family: 'Calibri';
+	font-size: 20px;
+}
+
+#sign-in-btn  {
+	padding-top: 20px;
+}
+
+.input-field {
+    border-radius: 4px;
+    background-color: #f9f2ec;
+    width: 250px;
+    font-family: Calibri;
+    font-size: 20px;
+    display: block;
+}
+
+.label-input {
+    font-family: Calibri;
+    font-size: 20px;
+}
+
+#row{
+    display: flex;
+	margin-top: 20px;
+}
+
+.table-title {
+	clear: both;
+	text-align: center;
+}
+
+#left-container{
+	width: 650px;
+	float: left;
+	display: flex;
+}
+
+#info {
+	margin-left: 20px;
+	width: 500px;
+	line-height: 200%;
+}
+
+#right-container {
+	width: 350px;
+	float: right;
+}
+
+table{
+	clear: both;
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 10px;
+}
+
+td, th {
+	border: 1px solid black;
+	padding: 5px;
+}
+
+#right-container button{
+	margin: 10px;
+	float: right;
+}
+
+button {
+	border-radius: 3px;
+	border: 5px;
+	background: brown;
+	cursor: pointer;
+	color: white;
+	width: fit	;
+	height: 30px;
+	font-family: inherit;
+	font-size: inherit;
+	padding: 5px;
+	line-height: 5px;
+}
+
+
+#cancel-order-btn {
+	width: 0;
+	display: block;
+}
+
+#cancel-order-btn {
+	width: 0;
+	display: block;
+}
+
+#wrap-profile-edit-form {
+	margin: auto;
+}
+
+.left-btn {
+	width: 0;
+	margin-left: 250px;
+}
+
+.left-btn button {
+	width: 150px;
+}
+
+#wrap-book-add-form {
+	display: flex;
+}
+
+#author-block {
+	margin-left: 20px;
+}
+
+#author-block input{
+	margin-bottom: 10px;
+}
+
+#book-block input{
+	margin-bottom: 10px;
+}
+
+.nolinebreak {
+    white-space: nowrap;
+}
+
+#choose-status {
+    font-size: 17px;
+    margin: 5px;
+}
+
+#change-status-form{
+	display: flex;
+}
+
+#confirm-btn{
+	margin-top: 5px;
+	float: left;
+}
+
+.multiselect {
+    width: 200px;
+}
+
+.selectBox {
+    position: relative;
+}
+
+.selectBox select {
+    width: 100%;
+}
+
+.overSelect {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+#checkboxes {
+    display: none;
+    border: 1px #dadada solid;
+}
+
+#checkboxes label {
+    display: block;
+}
+
+#checkboxes label:hover {
+    background-color: #1e90ff;
+}
+
+#wrap-new-user-form {
+	border: 1px solid brown;
+	border-radius: 15px;
+	margin: auto;
+	margin-top: 20px;
+	width: 500px;
+	position: relative;
+}
+
+#new-user-form  * {
+	margin: auto;
+}
+
+#new-user-form  {
+	margin: 30px;
+}
+
+#new-user-form  .input-field {
+	margin-right: 0;
+	margin: 5px;
+}
+
+#new-user-form  .label-input {
+	margin-left: 0;
+}
+
+#register-btn {
+	margin: auto;
+	width: 0;
+}
+
+.wrap-field {
+	display: flex;
+}
+
+#register-btn button {
+	width: 170px;
+}
+
+#log-in-btn {
+	padding-top: 10px;
+	margin: auto;
+	width: 500px;
+	text-align: center;
+}
+
+#error {
+    color: red;
+}
+
+#pageNotFound {
+    text-align: center;
+}

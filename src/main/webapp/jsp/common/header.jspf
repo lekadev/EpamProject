@@ -1,0 +1,3 @@
+<div id="header" style="background-image: url(${pageContext.request.contextPath}/image/library.jpg);">
+	<span><b>MyLibrary.com</b></span>
+</div>
