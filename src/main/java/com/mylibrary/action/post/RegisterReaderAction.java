@@ -1,6 +1,7 @@
 package com.mylibrary.action.post;
 
 import com.mylibrary.action.*;
+import com.mylibrary.service.UserService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import com.mylibrary.model.User;
@@ -17,8 +18,7 @@ public class RegisterReaderAction implements Action {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String resultPage = Paths.SHOW_READER_FORM;
-        req.getSession().removeAttribute(Attributes.REGISTRATION_MESSAGE);
-        String email = req.getParameter("email");
+        String email = req.getParameter(Parameters.USER_EMAIL);
         boolean emailValid = InputValidator.validateEmail(email);
         if(!emailValid) {
             req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.EMAIL_VALID_ERROR);
@@ -30,8 +30,8 @@ public class RegisterReaderAction implements Action {
             req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.EMAIL_EXIST_ERROR);
             return resultPage;
         }
-        String password = req.getParameter("password");
-        String passwordRepeated = req.getParameter("passwordRepeated");
+        String password = req.getParameter(Parameters.USER_PASSWORD);
+        String passwordRepeated = req.getParameter(Parameters.USER_PASSWORD_REPEATED);
         boolean passwordsEqual = password.equals(passwordRepeated);
         if(!passwordsEqual) {
             req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.PASSWORD_MATCH_ERROR);
@@ -42,9 +42,9 @@ public class RegisterReaderAction implements Action {
             req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.PASSWORD_VALID_ERROR);
             return resultPage;
         }
-        String nameFirst = req.getParameter("nameFirst");
-        String nameLast = req.getParameter("nameLast");
-        boolean nameValid = InputValidator.validateInputField(nameFirst) && InputValidator.validateInputField(nameLast);
+        String nameFirst = req.getParameter(Parameters.USER_NAME);
+        String nameLast = req.getParameter(Parameters.USER_SURNAME);
+        boolean nameValid = InputValidator.validateText(nameFirst) && InputValidator.validateText(nameLast);
         if(!nameValid) {
             req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.TEXT_INPUT_ERROR);
             return resultPage;
@@ -55,7 +55,7 @@ public class RegisterReaderAction implements Action {
         reader.setNameFirst(nameFirst);
         reader.setNameLast(nameLast);
         reader.setRole(User.Role.READER);
-        int idUser = new UserDao(pool).createReader(reader);
+        int idUser = new UserService(pool).createReader(reader);
         if(idUser != 0) {
             req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.REGISTRATION_SUCCESS_MESSAGE);
             logger.log(Level.INFO, "New reader was registered: " + reader.toString());

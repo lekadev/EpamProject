@@ -4,14 +4,7 @@ public class Librarian extends User {
 
     private String numberPhone;
 
-    public Librarian() {
-
-    }
-
-    public Librarian(int id, String email, String password, String nameFirst, String nameLast, Role role, String numberPhone) {
-        super(id, email, password, nameFirst, nameLast, role);
-        this.numberPhone = numberPhone;
-    }
+    public Librarian() {}
 
     public String getNumberPhone() {
         return numberPhone;

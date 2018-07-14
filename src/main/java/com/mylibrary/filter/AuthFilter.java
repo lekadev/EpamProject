@@ -8,14 +8,12 @@ import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
-
 public class AuthFilter implements Filter {
 
     private List<String> allowedURLs;
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
         allowedURLs = new ArrayList<>();
         allowedURLs.add("/login");
         allowedURLs.add("/new-reader");
@@ -36,7 +34,5 @@ public class AuthFilter implements Filter {
     }
 
     @Override
-    public void destroy() {
-
-    }
+    public void destroy() {}
 }

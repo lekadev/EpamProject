@@ -8,7 +8,7 @@ public class Paths {
     public static final String PROFILE_FORM_PAGE = "edit-profile-form";
     public static final String READER_PROFILE_PAGE = "reader";
     public static final String LIBRARIAN_PROFILE_PAGE = "librarian";
-    public static final String START_PAGE = "login";
+    public static final String START_PAGE = "newlogin";
     public static final String NEW_READER_FORM_PAGE = "new-reader-form";
 
     public static final String SHOW_PROFILE = "profile";

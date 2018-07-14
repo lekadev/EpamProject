@@ -16,9 +16,8 @@ public class ChangePasswordAction implements Action {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String resultPage = Paths.SHOW_PROFILE_EDIT_FORM;
-        String password = req.getParameter("password");
-        String passwordRepeated = req.getParameter("passwordRepeated");
-        req.getSession().removeAttribute(Attributes.PASSWORD_UPDATE_MESSAGE);
+        String password = req.getParameter(Parameters.USER_PASSWORD);
+        String passwordRepeated = req.getParameter(Parameters.USER_PASSWORD_REPEATED);
         boolean passwordValid = InputValidator.validatePassword(password) && InputValidator.validatePassword(passwordRepeated);
         if(!passwordValid) {
             req.getSession().setAttribute(Attributes.PASSWORD_UPDATE_MESSAGE, ErrorMessages.PASSWORD_VALID_ERROR);

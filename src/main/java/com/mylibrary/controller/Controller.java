@@ -12,9 +12,7 @@ public class Controller extends HttpServlet {
     private final static String METHOD_POST = "POST";
 
     @Override
-    public void init() {
-        //This method has to be overridden
-    }
+    public void init() {}
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -41,7 +39,5 @@ public class Controller extends HttpServlet {
     }
 
     @Override
-    public void destroy() {
-        //This method has to be overridden
-    }
+    public void destroy() {}
 }

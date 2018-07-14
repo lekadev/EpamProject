@@ -9,7 +9,6 @@ public class ShowAuthorFormAction implements Action {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        String resultPage = Paths.NEW_AUTHOR_FORM_PAGE;
-        return resultPage;
+        return Paths.NEW_AUTHOR_FORM_PAGE;
     }
 }

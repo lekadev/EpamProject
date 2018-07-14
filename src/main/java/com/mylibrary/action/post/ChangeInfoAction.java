@@ -13,12 +13,11 @@ public class ChangeInfoAction implements Action {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String resultPage = Paths.SHOW_PROFILE_EDIT_FORM;
-        String nameFirst = req.getParameter("nameFirst");
-        String nameLast = req.getParameter("nameLast");
-        String numberPhone = req.getParameter("numberPhone");
+        String nameFirst = req.getParameter(Parameters.USER_NAME);
+        String nameLast = req.getParameter(Parameters.USER_SURNAME);
+        String numberPhone = req.getParameter(Parameters.USER_PHONE);
         User user = (User) req.getSession().getAttribute(Attributes.USER);
-        req.getSession().removeAttribute(Attributes.PROFILE_UPDATE_MESSAGE);
-        boolean fieldsValid = InputValidator.validateInputField(nameFirst) && InputValidator.validateInputField(nameLast);
+        boolean fieldsValid = InputValidator.validateText(nameFirst) && InputValidator.validateText(nameLast);
         if(user.getRole() == User.Role.LIBRARIAN) {
             fieldsValid = fieldsValid && InputValidator.validateNumber(numberPhone);
         }

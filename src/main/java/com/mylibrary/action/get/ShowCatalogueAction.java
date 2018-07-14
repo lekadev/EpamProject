@@ -9,7 +9,6 @@ public class ShowCatalogueAction implements Action {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        String resultPage = Paths.CATALOGUE_PAGE;
-        return resultPage;
+        return Paths.CATALOGUE_PAGE;
     }
 }

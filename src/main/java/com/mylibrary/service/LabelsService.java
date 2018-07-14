@@ -1,4 +1,4 @@
-package com.mylibrary.dao;
+package com.mylibrary.service;
 
 import java.sql.*;
 import java.util.Map;
@@ -8,25 +8,24 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import com.mylibrary.db.ConnectionPool;
 
-public class LabelDao {
+public class LabelsService {
 
     private ConnectionPool pool;
-    private final static Logger logger = Logger.getLogger(LabelDao.class);
+    private final static Logger logger = Logger.getLogger(LabelsService.class);
 
-    private final String sql = "SELECT * FROM library.label JOIN locale USING(id_locale) WHERE name_locale=?";
-
-    public LabelDao(ConnectionPool pool) {
+    public LabelsService(ConnectionPool pool) {
         this.pool = pool;
     }
 
     public Map<String, String> initLabelData(Locale locale) {
+        String labelQuery = "SELECT * FROM library.label JOIN locale USING(id_locale) WHERE name_locale=?";
         Map<String, String> labels = new HashMap<>();
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             connection = pool.takeConnection();
-            statement = connection.prepareStatement(sql);
+            statement = connection.prepareStatement(labelQuery);
             statement.setString(1, locale.getLanguage());
             resultSet = statement.executeQuery();
             while (resultSet.next()) {

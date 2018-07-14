@@ -9,7 +9,6 @@ public class ShowEditPageAction implements Action {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        String resultPage = Paths.PROFILE_FORM_PAGE;
-        return resultPage;
+        return Paths.PROFILE_FORM_PAGE;
     }
 }

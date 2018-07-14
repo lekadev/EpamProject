@@ -1,33 +1,22 @@
 package com.mylibrary.model;
 
-public class User {
+public class User extends Entity {
 
-    private int id;
     private String email;
     private String password;
     private String nameFirst;
     private String nameLast;
     private Role role;
 
-    public User() {
-
-    }
+    public User() {}
 
     public User(int id, String email, String password, String nameFirst, String nameLast, Role role) {
-        this.id = id;
+        super(id);
         this.email = email;
         this.password = password;
         this.nameFirst = nameFirst;
         this.nameLast = nameLast;
         this.role = role;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getEmail() {
@@ -71,12 +60,12 @@ public class User {
     }
 
     public enum Role {
-        LIBRARIAN, READER, GUEST;
+        LIBRARIAN, READER, GUEST
     }
 
     @Override
     public String toString() {
-        return "User ID#: " + id +
+        return "User ID#: " + super.getId() +
                 "\nEmail: " + email +
                 "\nName: " + nameFirst + " " + nameLast +
                 "\nRole: " + role;

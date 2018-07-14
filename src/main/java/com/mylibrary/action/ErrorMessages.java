@@ -2,7 +2,8 @@ package com.mylibrary.action;
 
 public class ErrorMessages {
 
-    public static final String TEXT_INPUT_ERROR = "Please, fill all required fields";
+    public static final String TEXT_INPUT_ERROR = "Please, fill all required fields correctly";
+    public static final String BOOK_SUCCESS_MESSAGE = "The book was added successfully";
     public static final String AUTHOR_SUCCESS_MESSAGE = "Author was added successfully";
     public static final String AUTHOR_ADD_ERROR = "Operation failed. Please, try again";
     public static final String NO_AUTHOR_ERROR = "Please, select at least 1 author";

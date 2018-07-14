@@ -8,7 +8,7 @@ public class InputValidator {
     public static boolean validateEmail(String email) {
         boolean isValid = false;
         if(email != null) {
-            final String emailRegex = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$";
+            final String emailRegex = "^[\\w-+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$";
             Pattern pattern = Pattern.compile(emailRegex);
             Matcher matcher = pattern.matcher(email);
             isValid = matcher.matches();
@@ -27,7 +27,7 @@ public class InputValidator {
         return isValid;
     }
 
-    public static boolean validateInputField(String text) {
+    public static boolean validateText(String text) {
         boolean isValid = false;
         if(text != null && !text.trim().isEmpty()) {
             isValid = true;
@@ -42,6 +42,17 @@ public class InputValidator {
             Pattern pattern = Pattern.compile(passwordRegex);
             Matcher matcher = pattern.matcher(number);
             isValid = matcher.matches();
+        }
+        return isValid;
+    }
+
+    public static boolean validateInteger(String stringInteger) {
+        boolean isValid;
+        try {
+            Integer.parseInt(stringInteger);
+            isValid = true;
+        } catch (NumberFormatException e) {
+            isValid = false;
         }
         return isValid;
     }

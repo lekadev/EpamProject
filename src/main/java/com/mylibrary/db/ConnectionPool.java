@@ -14,14 +14,12 @@ import java.util.concurrent.ArrayBlockingQueue;
 public class ConnectionPool {
 
     private static final Logger logger = Logger.getLogger(ConnectionPool.class);
-
     private static ConnectionPool poolInstance = null;
     private static volatile boolean isCreated = false;
 
     private BlockingQueue<Connection> availableConnections;
     private BlockingQueue<Connection> givenAwayConnections;
 
-    private ResourceBundle bundle;
     private String password;
     private int poolSize;
     private String login;
@@ -32,14 +30,15 @@ public class ConnectionPool {
             synchronized (ConnectionPool.class) {
                 poolInstance = new ConnectionPool();
                 isCreated = true;
+                logger.log(Level.INFO, "Connection pool was initialized");
             }
         }
         return poolInstance;
     }
 
     private ConnectionPool() {
-        this.bundle = ResourceBundle.getBundle(DBConfig.DB_FILENAME);
-        this.poolSize = Integer.parseInt(bundle.getString(DBConfig.DB_POOLSIZE));
+        ResourceBundle bundle = ResourceBundle.getBundle(DBConfig.DB_FILENAME);
+        this.poolSize = Integer.parseInt(bundle.getString(DBConfig.DB_POOL_SIZE));
         this.url = bundle.getString(DBConfig.DB_URL);
         this.login = bundle.getString(DBConfig.DB_LOGIN);
         this.password = bundle.getString(DBConfig.DB_PASSWORD);
@@ -61,7 +60,7 @@ public class ConnectionPool {
     }
 
     public Connection takeConnection() throws SQLException {
-        Connection connection = null;
+        Connection connection;
         try {
             connection = availableConnections.take();
             givenAwayConnections.offer(connection);
@@ -71,30 +70,6 @@ public class ConnectionPool {
         }
 
         return connection;
-    }
-
-    public void closeConnection(Connection con, Statement st, ResultSet rs) {
-        try {
-            if(con != null) {
-                con.close();
-            }
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Unable to return connection to the pool", e);
-        }
-        try {
-            if(st != null) {
-                st.close();
-            }
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Unable to close statement", e);
-        }
-        try {
-            if(rs != null) {
-                rs.close();
-            }
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Unable to close result set", e);
-        }
     }
 
     public void closeConnection(Connection con, PreparedStatement pst, ResultSet rs) {
@@ -118,23 +93,6 @@ public class ConnectionPool {
             }
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to close result set", e);
-        }
-    }
-
-    public void closeConnection(Connection con, Statement st) {
-        try {
-            if(con != null) {
-                con.close();
-            }
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Unable to return connection to the pool", e);
-        }
-        try {
-            if(st != null) {
-                st.close();
-            }
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Unable to close statement", e);
         }
     }
 
@@ -166,11 +124,11 @@ public class ConnectionPool {
     }
 
     public void dispose() {
-        disposeConenctionsQueue(availableConnections);
-        disposeConenctionsQueue(givenAwayConnections);
+        disposeConnectionsQueue(availableConnections);
+        disposeConnectionsQueue(givenAwayConnections);
     }
 
-    public void disposeConenctionsQueue(BlockingQueue<Connection> queue) {
+    private void disposeConnectionsQueue(BlockingQueue<Connection> queue) {
         Connection connection;
         while((connection = queue.poll()) != null) {
             try {
@@ -186,12 +144,12 @@ public class ConnectionPool {
 
         private Connection connection;
 
-        public PooledConnection(Connection connection) throws SQLException {
+        PooledConnection(Connection connection) throws SQLException {
             this.connection = connection;
             this.connection.setAutoCommit(true);
         }
 
-        public void reallyClose() throws SQLException {
+        private void reallyClose() throws SQLException {
             connection.close();
         }
 

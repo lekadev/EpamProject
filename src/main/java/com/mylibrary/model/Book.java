@@ -1,33 +1,23 @@
 package com.mylibrary.model;
 
 import java.util.List;
+import java.util.StringJoiner;
 
-public class Book {
+public class Book extends Entity {
 
-    private int id;
     private String title;
     private List<Author> authors;
     private String publisher;
     private int numberCopies;
 
-    public Book() {
-
-    }
+    public Book() {}
 
     public Book(int id, String title, List<Author> authors, String publisher, int numberCopies) {
-        this.id = id;
+        super(id);
         this.title = title;
         this.authors = authors;
         this.publisher = publisher;
         this.numberCopies = numberCopies;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getTitle() {
@@ -62,58 +52,11 @@ public class Book {
         this.numberCopies = numberCopies;
     }
 
-    public static class Author {
-
-        private int id;
-        private String nameFirst;
-        private String nameLast;
-
-        public Author() {
-
-        }
-
-        public Author(int id, String name, String surname) {
-            this.id = id;
-            this.nameFirst = name;
-            this.nameLast = surname;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getNameFirst() {
-            return nameFirst;
-        }
-
-        public void setNameFirst(String nameFirst) {
-            this.nameFirst = nameFirst;
-        }
-
-        public String getNameLast() {
-            return nameLast;
-        }
-
-        public void setNameLast(String nameLast) {
-            this.nameLast = nameLast;
-        }
-
-        @Override
-        public String toString() {
-            return "Author ID#: " + id +
-                    "\nName: " + nameFirst + nameLast;
-        }
-    }
-
     @Override
     public String toString() {
-        return "Book ID#: " + id +
+        return "Book ID#: " + super.getId() +
                 "\nTitle: " + title +
-                "\nAuthors: " + authors +
+                "\nAuthors: " + authors.toString() +
                 "\nPublisher: " + publisher +
                 "\nAvailable copies: " + numberCopies;
     }

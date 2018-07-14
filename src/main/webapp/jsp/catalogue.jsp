@@ -85,21 +85,19 @@
 	            <th>${labels.title}</th>
 	            <th>${labels.bookAuthors}</th>
 	            <th>${labels.publisher}</th>
-	            <th>${labels.copies}</th>
 	        </tr>
 	        <c:forEach var="book" items="${catalogue}">
 	            <tr>
-	                <td>${book.value.id}</td>
-	                <td><a href="${pageContext.request.contextPath}/controller/show-book?idBook=${book.key}">
-	                    ${book.value.title}</a>
+	                <td>${book.id}</td>
+	                <td><a href="${pageContext.request.contextPath}/controller/show-book?idBook=${book.id}">
+	                    ${book.title}</a>
 	                </td>
 	                <td>
-                        <c:forEach var="author" items="${book.value.authors}" varStatus="authorStatus">
+                        <c:forEach var="author" items="${book.authors}" varStatus="authorStatus">
                             <c:out value="${author.nameFirst} ${author.nameLast}"/>${!authorStatus.last ? ',' : ''}
                         </c:forEach>
                     </td>
-                    <td>${book.value.publisher}</td>
-                    <td>${book.value.numberCopies}</td>
+                    <td>${book.publisher}</td>
                 </tr>
             </c:forEach>
         </table>

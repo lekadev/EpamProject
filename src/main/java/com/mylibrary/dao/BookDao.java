@@ -1,40 +1,38 @@
 package com.mylibrary.dao;
 
 import java.sql.*;
-import java.util.Map;
 import java.util.List;
+import java.util.ArrayList;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import com.mylibrary.model.Book;
 import com.mylibrary.db.DBColumns;
 import com.mylibrary.db.ConnectionPool;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class BookDao {
+public class BookDao extends EntityDao<Integer, Book> {
 
     private ConnectionPool pool;
     private final static Logger logger = Logger.getLogger(BookDao.class);
-
-    private final static String SELECT_ALL = "SELECT * FROM library.book";
-    private final static String SELECT_BY_ID = "SELECT * FROM library.book WHERE id_book=?";
+    private final static String SELECT_ALL = "SELECT id_book, title, publisher, number_copies FROM library.book";
+    private final static String SELECT_BY_ID = "SELECT id_book, title, publisher, number_copies FROM library.book WHERE id_book=?";
 
     public BookDao(ConnectionPool pool) {
         this.pool = pool;
     }
 
-    public Map<Integer, Book> findAllBooks() {
-        String sql = SELECT_ALL;
-        Map<Integer, Book> books = new ConcurrentHashMap<>();
+    @Override
+    public List<Book> findAll() {
+        List<Book> books = new ArrayList<>();
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             connection = pool.takeConnection();
-            statement = connection.prepareStatement(sql);
+            statement = connection.prepareStatement(SELECT_ALL);
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Book book = retrieveBook(resultSet);
-                books.put(book.getId(), book);
+                books.add(book);
             }
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to get list of books", e);
@@ -44,65 +42,18 @@ public class BookDao {
         return books;
     }
 
-    public int create(Book book){
-        String bookSQl = "INSERT INTO library.book(title, publisher, number_copies) VALUES(?, ?, ?)";
-        String book2AuthorSQl = "INSERT INTO library.book2author(id_book, id_author) VALUES(?, ?)";
-        Connection connection = null;
-        PreparedStatement bookStatement = null;
-        PreparedStatement book2AuthorStatement = null;
-        ResultSet generatedKey = null;
-        int idBook = 0;
-        try {
-            connection = pool.takeConnection();
-            connection.setAutoCommit(false);
-            bookStatement = connection.prepareStatement(bookSQl, PreparedStatement.RETURN_GENERATED_KEYS);
-            bookStatement.setString(1, book.getTitle());
-            bookStatement.setString(2, book.getPublisher());
-            bookStatement.setInt(3, book.getNumberCopies());
-            bookStatement.executeUpdate();
-            generatedKey = bookStatement.getGeneratedKeys();
-            int generatedId = 0;
-            if(generatedKey.next()) {
-                generatedId = generatedKey.getInt(1);
-                if(generatedId != 0) {
-                    book2AuthorStatement = connection.prepareStatement(book2AuthorSQl);
-                    List<Book.Author> authors = book.getAuthors();
-                    for(Book.Author author : authors) {
-                        book2AuthorStatement.setInt(1, generatedId);
-                        book2AuthorStatement.setInt(2, author.getId());
-                        book2AuthorStatement.addBatch();
-                    }
-                    book2AuthorStatement.executeBatch();
-                }
-            }
-            connection.commit();
-            connection.setAutoCommit(true);
-            idBook = generatedId;
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Unable to execute new book insertion transaction", e);
-            try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                logger.log(Level.ERROR, "Unable to roll back new book insertion transaction", e);
-            }
-        } finally {
-            pool.closeConnection(connection);
-        }
-        return idBook;
-    }
-
-    public Book findBookById(int id) {
-        String sql = SELECT_BY_ID;
+    @Override
+    public Book findById(Integer idBook) {
         Book book = null;
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             connection = pool.takeConnection();
-            statement = connection.prepareStatement(sql);
-            statement.setInt(1, id);
+            statement = connection.prepareStatement(SELECT_BY_ID);
+            statement.setInt(1, idBook);
             resultSet = statement.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 book = retrieveBook(resultSet);
             }
         } catch (SQLException e) {
@@ -111,6 +62,21 @@ public class BookDao {
             pool.closeConnection(connection, statement, resultSet);
         }
         return book;
+    }
+
+    @Override
+    public int deleteById(Integer idBook) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Integer create(Book book) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int update(Book book) {
+        throw new UnsupportedOperationException();
     }
 
     private Book retrieveBook(ResultSet resultSet) {

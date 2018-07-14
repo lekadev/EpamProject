@@ -1,6 +1,5 @@
 package com.mylibrary.action.post;
 
-import java.util.Map;
 import java.util.List;
 import java.util.Locale;
 import java.util.ArrayList;
@@ -20,9 +19,9 @@ public class LoginAction implements Action {
         String resultPage = Paths.SHOW_PROFILE;
         req.getSession().removeAttribute(Attributes.LOGIN_MESSAGE);
         req.getSession().removeAttribute(Attributes.PASSWORD_UPDATE_MESSAGE);
-        String email = req.getParameter("email".toLowerCase());
-        String password = req.getParameter("password");
-        boolean fieldsValid = InputValidator.validateInputField(email) && InputValidator.validateInputField(password);
+        String email = req.getParameter(Parameters.USER_EMAIL.toLowerCase());
+        String password = req.getParameter(Parameters.USER_PASSWORD);
+        boolean fieldsValid = InputValidator.validateText(email) && InputValidator.validateText(password);
         if(!fieldsValid) {
             req.getSession().setAttribute(Attributes.LOGIN_MESSAGE, ErrorMessages.TEXT_INPUT_ERROR);
             return Paths.SHOW_START_PAGE;
@@ -55,10 +54,11 @@ public class LoginAction implements Action {
                 order.setUser(user);
             }
         }
-        Map<Integer, Book> catalogue = (Map<Integer, Book>)req.getServletContext().getAttribute(Attributes.CATALOGUE);
         for(Order order : orders) {
             int idBook = order.getBook().getId();
-            Book book = catalogue.get(idBook);
+            Book book = new BookDao(pool).findById(idBook);
+            List<Author> authors = new AuthorDao(pool).findAuthorsOfBook(idBook);
+            book.setAuthors(authors);
             order.setBook(book);
         }
         req.getSession().setAttribute(Attributes.ORDERS, orders);

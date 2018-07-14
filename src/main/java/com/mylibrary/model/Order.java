@@ -2,33 +2,14 @@ package com.mylibrary.model;
 
 import java.util.Date;
 
-public class Order {
+public class Order extends Entity {
 
-    private int id;
     private User user;
     private Book book;
     private OrderStatus status;
     private Date date;
 
-    public Order() {
-
-    }
-
-    public Order(int id, User user, Book book, OrderStatus status, Date date) {
-        this.id = id;
-        this.user = user;
-        this.book= book;
-        this.status = status;
-        this.date = date;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+    public Order() {}
 
     public User getUser() {
         return user;
@@ -72,17 +53,8 @@ public class Order {
         int id;
         String description;
 
-        OrderStatus() {
-
-        }
-
         OrderStatus(int id) {
             this.id = id;
-        }
-
-        OrderStatus(int id, String description) {
-            this.id = id;
-            this.description = description;
         }
 
         public int getId() {
@@ -100,10 +72,10 @@ public class Order {
 
     @Override
     public String toString() {
-        return "Order ID#" + id +
+        return "Order ID#" + super.getId() +
                 "\n" + user.toString() +
                 "\n" + book.toString() +
-                //"\nStatus: " + status.getDescription() +
+                "\nStatus: " + status.getDescription() +
                 "\nOrdered on : " + date;
     }
 }

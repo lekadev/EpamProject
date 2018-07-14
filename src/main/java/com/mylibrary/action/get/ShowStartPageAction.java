@@ -9,7 +9,6 @@ public class ShowStartPageAction implements Action {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        String resultPage = Paths.START_PAGE;
-        return resultPage;
+        return Paths.START_PAGE;
     }
 }

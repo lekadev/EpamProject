@@ -10,15 +10,14 @@ import org.apache.log4j.Logger;
 import com.mylibrary.db.DBColumns;
 import com.mylibrary.db.ConnectionPool;
 
-public class OrderDao {
+public class OrderDao extends EntityDao<Integer, Order> {
 
     private ConnectionPool pool;
     private final static Logger logger = Logger.getLogger(OrderDao.class);
-
     private final static String SELECT_ALL = "SELECT * FROM library.order JOIN order_status USING(id_status) JOIN locale USING(id_locale) WHERE name_locale=? ORDER BY date DESC";
-    private final static String SELECT_BY_USERID = "SELECT * FROM library.order JOIN order_status USING(id_status) JOIN locale USING(id_locale) WHERE id_user=? AND name_locale=? ORDER BY date DESC";
-    private final static String UPDATE_STATUS_BY_ORDRID = "UPDATE library.order SET id_status=? WHERE id_order=?";
-    private final static String DELETE_BY_ORDERID = "DELETE FROM library.order WHERE id_order=?";
+    private final static String SELECT_BY_USER_ID = "SELECT * FROM library.order JOIN order_status USING(id_status) JOIN locale USING(id_locale) WHERE id_user=? AND name_locale=? ORDER BY date DESC";
+    private final static String UPDATE_STATUS_BY_ORDER_ID = "UPDATE library.order SET id_status=? WHERE id_order=?";
+    private final static String DELETE_BY_ORDER_ID = "DELETE FROM library.order WHERE id_order=?";
     private final static String INSERT = "INSERT INTO library.order (id_book, id_user, id_status) VALUES(?, ?, ?)";
 
 
@@ -26,39 +25,24 @@ public class OrderDao {
         this.pool = pool;
     }
 
-    public List<Order> findOrdersOfUser(User user, Locale locale) {
-        String sql = SELECT_BY_USERID;
-        List<Order> orders = new ArrayList<>();
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = pool.takeConnection();
-            statement = connection.prepareStatement(sql);
-            statement.setInt(1, user.getId());
-            statement.setString(2, locale.getLanguage());
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Order order = retrieveOrder(resultSet);
-                order.setUser(user);
-                orders.add(order);
-            }
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Unable to get user's list of orders", e);
-        } finally {
-            pool.closeConnection(connection, statement, resultSet);
-        }
-        return orders;
+    @Override
+    public List<Order> findAll() {
+        throw new UnsupportedOperationException();
     }
 
-    public int deleteByOrderId(int idOrder) {
-        String sql = DELETE_BY_ORDERID;
+    @Override
+    public Order findById(Integer id) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public int deleteById(Integer idOrder) {
         Connection connection = null;
         PreparedStatement statement = null;
         int rowsUpdated = 0;
         try {
             connection = pool.takeConnection();
-            statement = connection.prepareStatement(sql);
+            statement = connection.prepareStatement(DELETE_BY_ORDER_ID);
             statement.setInt(1, idOrder);
             rowsUpdated = statement.executeUpdate();
         } catch (SQLException e) {
@@ -69,8 +53,8 @@ public class OrderDao {
         return rowsUpdated;
     }
 
-    public int createOrder(Order order) {
-        String sql = INSERT;
+    @Override
+    public Integer create(Order order) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet generatedKey = null;
@@ -94,23 +78,9 @@ public class OrderDao {
         return idOrder;
     }
 
-    public int changeStatus(int idOrder, Order.OrderStatus status) {
-        String sql = UPDATE_STATUS_BY_ORDRID;
-        Connection connection = null;
-        PreparedStatement statement = null;
-        int rowsUpdated = 0;
-        try {
-            connection = pool.takeConnection();
-            statement = connection.prepareStatement(UPDATE_STATUS_BY_ORDRID);
-            statement.setInt(1, status.getId());
-            statement.setInt(2, idOrder);
-            rowsUpdated = statement.executeUpdate();
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Unable to update status", e);
-        } finally {
-            pool.closeConnection(connection, statement);
-        }
-        return rowsUpdated;
+    @Override
+    public int update(Order entity) {
+        throw new UnsupportedOperationException();
     }
 
     public List<Order> findAllOrders(Locale locale) {
@@ -133,6 +103,48 @@ public class OrderDao {
             pool.closeConnection(connection, statement, resultSet);
         }
         return orders;
+    }
+
+    public List<Order> findOrdersOfUser(User user, Locale locale) {
+        List<Order> orders = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = pool.takeConnection();
+            statement = connection.prepareStatement(SELECT_BY_USER_ID);
+            statement.setInt(1, user.getId());
+            statement.setString(2, locale.getLanguage());
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Order order = retrieveOrder(resultSet);
+                order.setUser(user);
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "Unable to get user's list of orders", e);
+        } finally {
+            pool.closeConnection(connection, statement, resultSet);
+        }
+        return orders;
+    }
+
+    public int changeStatus(int idOrder, Order.OrderStatus status) {
+        Connection connection = null;
+        PreparedStatement statement = null;
+        int rowsUpdated = 0;
+        try {
+            connection = pool.takeConnection();
+            statement = connection.prepareStatement(UPDATE_STATUS_BY_ORDER_ID);
+            statement.setInt(1, status.getId());
+            statement.setInt(2, idOrder);
+            rowsUpdated = statement.executeUpdate();
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "Unable to update status", e);
+        } finally {
+            pool.closeConnection(connection, statement);
+        }
+        return rowsUpdated;
     }
 
     private Order retrieveOrder(ResultSet resultSet) {

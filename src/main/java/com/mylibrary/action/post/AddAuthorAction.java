@@ -4,7 +4,7 @@ import java.util.List;
 import com.mylibrary.action.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import com.mylibrary.model.Book;
+import com.mylibrary.model.Author;
 import com.mylibrary.dao.AuthorDao;
 import com.mylibrary.db.ConnectionPool;
 import javax.servlet.http.HttpServletRequest;
@@ -17,21 +17,20 @@ public class AddAuthorAction implements Action {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String path = Paths.SHOW_AUTHOR_FORM;
-        String nameFirst = req.getParameter("nameFirst");
-        String nameLast = req.getParameter("nameLast");
-        req.getSession().removeAttribute(Attributes.AUTHOR_ADD_MESSAGE);
-        boolean fieldsValid = InputValidator.validateInputField(nameFirst) && InputValidator.validateInputField(nameLast);
+        String nameFirst = req.getParameter(Parameters.AUTHOR_NAME);
+        String nameLast = req.getParameter(Parameters.AUTHOR_SURNAME);
+        boolean fieldsValid = InputValidator.validateText(nameFirst) && InputValidator.validateText(nameLast);
         if(!fieldsValid) {
             req.getSession().setAttribute(Attributes.AUTHOR_ADD_MESSAGE, ErrorMessages.TEXT_INPUT_ERROR);
             return path;
         }
-        Book.Author author = new Book.Author();
+        Author author = new Author();
         author.setNameFirst(nameFirst);
         author.setNameLast(nameLast);
         ConnectionPool pool = ConnectionPool.getInstance();
         int id = new AuthorDao(pool).create(author);
         if(id != 0) {
-            List<Book.Author> allAuthors = new AuthorDao(pool).findAll();
+            List<Author> allAuthors = new AuthorDao(pool).findAll();
             if(allAuthors != null) {
                 req.getServletContext().setAttribute(Attributes.ALL_AUTHORS, allAuthors);
             }
