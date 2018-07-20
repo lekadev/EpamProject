@@ -1,7 +1,6 @@
 package com.mylibrary.model;
 
 import java.util.List;
-import java.util.StringJoiner;
 
 public class Book extends Entity {
 
@@ -50,6 +49,43 @@ public class Book extends Entity {
 
     public void setNumberCopies(int numberCopies) {
         this.numberCopies = numberCopies;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if(this == object) {
+            return true;
+        }
+        if(object == null) {
+            return false;
+        }
+        if(getClass() != object.getClass()) {
+            return false;
+        }
+        Book other = (Book) object;
+        if(this.getId() != other.getId()) {
+            return false;
+        }
+        if(this.numberCopies != other.numberCopies) {
+            return false;
+        }
+        if(title == null) {
+            if(other.title != null) {
+                return false;
+            }
+        } else if(!title.equals(other.title)) {
+            return false;
+        }
+        if(publisher == null) {
+            if(other.publisher != null) {
+                return false;
+            }
+        } else if(!publisher.equals(other.publisher)) {
+            return false;
+        }
+        if(authors == null) {
+            return other.authors == null;
+        } else return authors.equals(other.authors);
     }
 
     @Override

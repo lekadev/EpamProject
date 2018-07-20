@@ -142,19 +142,19 @@ select {
 }
 
 #left-container{
-	width: 650px;
+	width: 630px;
 	float: left;
 	display: flex;
 }
 
 #info {
 	margin-left: 20px;
-	width: 500px;
+	width: 480px;
 	line-height: 200%;
 }
 
 #right-container {
-	width: 350px;
+	width: 370px;
 	float: right;
 }
 
@@ -200,7 +200,7 @@ button {
 	display: block;
 }
 
-#wrap-profile-edit-form {
+#wrap-edit-form {
 	margin: auto;
 }
 
@@ -242,7 +242,7 @@ button {
 	display: flex;
 }
 
-#confirm-btn{
+.table-btn{
 	margin-top: 5px;
 	float: left;
 }
@@ -332,4 +332,8 @@ button {
 
 #pageNotFound {
     text-align: center;
+}
+
+.edit-field {
+    width: 380px;
 }

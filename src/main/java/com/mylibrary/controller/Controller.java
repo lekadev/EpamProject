@@ -5,6 +5,7 @@ import javax.servlet.http.*;
 import java.io.IOException;
 import com.mylibrary.action.Action;
 import com.mylibrary.action.ActionFactory;
+import com.mylibrary.action.exception.ActionException;
 
 public class Controller extends HttpServlet {
 
@@ -26,15 +27,16 @@ public class Controller extends HttpServlet {
 
     private void handleRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Action action = ActionFactory.defineAction(req);
-        String resultPage = action.execute(req, resp);
-        if(resultPage == null) {
-            req.getRequestDispatcher("/jsp/error.jsp").forward(req, resp);
-        } else  {
-            if(req.getMethod().equals(METHOD_POST)) {
-                resp.sendRedirect(resultPage);
-            } else if (req.getMethod().equals(METHOD_GET)){
-                req.getRequestDispatcher("/jsp/" + resultPage + ".jsp").forward(req,resp);
-            }
+        String resultPage;
+        try {
+            resultPage = action.execute(req, resp);
+        } catch (ActionException e) {
+            throw new ServletException();
+        }
+        if(req.getMethod().equals(METHOD_POST)) {
+            resp.sendRedirect(resultPage);
+        } else if (req.getMethod().equals(METHOD_GET)){
+            req.getRequestDispatcher("/jsp/" + resultPage + ".jsp").forward(req,resp);
         }
     }
 

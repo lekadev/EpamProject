@@ -1,53 +1,63 @@
 package com.mylibrary.action.post;
 
+import java.sql.Date;
+import java.util.Calendar;
 import com.mylibrary.action.*;
-import com.mylibrary.service.UserService;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import com.mylibrary.model.User;
 import com.mylibrary.dao.UserDao;
 import com.mylibrary.model.Reader;
 import com.mylibrary.db.ConnectionPool;
+import com.mylibrary.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.mylibrary.validator.InputValidator;
+import com.mylibrary.dao.exception.DaoException;
+import com.mylibrary.action.exception.ActionException;
+import com.mylibrary.service.exception.ServiceException;
 
 public class RegisterReaderAction implements Action {
 
     private final static Logger logger = Logger.getLogger(RegisterReaderAction.class);
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        String resultPage = Paths.SHOW_READER_FORM;
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionException {
         String email = req.getParameter(Parameters.USER_EMAIL);
-        boolean emailValid = InputValidator.validateEmail(email);
+        boolean emailValid = InputValidator.isEmailValid(email);
         if(!emailValid) {
-            req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.EMAIL_VALID_ERROR);
-            return resultPage;
+            req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.EMAIL_INVALID_ERROR);
+            return Paths.REDIRECT_READER_FORM;
         }
         ConnectionPool pool = ConnectionPool.getInstance();
-        boolean isRegistered = new UserDao(pool).isRegistered(email);
+        boolean isRegistered;
+        try {
+            isRegistered = new UserDao(pool).isRegistered(email);
+        } catch (DaoException e) {
+            throw new ActionException();
+        }
         if(isRegistered) {
             req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.EMAIL_EXIST_ERROR);
-            return resultPage;
+            return Paths.REDIRECT_READER_FORM;
         }
         String password = req.getParameter(Parameters.USER_PASSWORD);
         String passwordRepeated = req.getParameter(Parameters.USER_PASSWORD_REPEATED);
-        boolean passwordsEqual = password.equals(passwordRepeated);
-        if(!passwordsEqual) {
-            req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.PASSWORD_MATCH_ERROR);
-            return resultPage;
-        }
-        boolean passwordValid = InputValidator.validatePassword(password);
+        boolean passwordValid = InputValidator.isPasswordValid(password);
         if(!passwordValid) {
-            req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.PASSWORD_VALID_ERROR);
-            return resultPage;
+            req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.PASSWORD_PATTERN_ERROR);
+            return Paths.REDIRECT_READER_FORM;
+        }
+        boolean passwordsMatch = password.equals(passwordRepeated);
+        if(!passwordsMatch) {
+            req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.PASSWORD_MATCH_ERROR);
+            return Paths.REDIRECT_READER_FORM;
         }
         String nameFirst = req.getParameter(Parameters.USER_NAME);
         String nameLast = req.getParameter(Parameters.USER_SURNAME);
-        boolean nameValid = InputValidator.validateText(nameFirst) && InputValidator.validateText(nameLast);
-        if(!nameValid) {
+        boolean fieldsValid = InputValidator.isTextValid(nameFirst) && InputValidator.isTextValid(nameLast);
+        if(!fieldsValid) {
             req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.TEXT_INPUT_ERROR);
-            return resultPage;
+            return Paths.REDIRECT_READER_FORM;
         }
         Reader reader = new Reader();
         reader.setEmail(email);
@@ -55,14 +65,16 @@ public class RegisterReaderAction implements Action {
         reader.setNameFirst(nameFirst);
         reader.setNameLast(nameLast);
         reader.setRole(User.Role.READER);
-        int idUser = new UserService(pool).createReader(reader);
-        if(idUser != 0) {
-            req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.REGISTRATION_SUCCESS_MESSAGE);
-            logger.log(Level.INFO, "New reader was registered: " + reader.toString());
-            return Paths.SHOW_START_PAGE;
-        } else {
-            req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.REGISTRATION_ERROR);
+        java.sql.Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
+        reader.setDateRegistered(currentDate);
+        UserService userService = new UserService(pool);
+        try {
+            userService.createReader(reader);
+        } catch (ServiceException e) {
+            throw new ActionException();
         }
-        return resultPage;
+        req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.REGISTRATION_SUCCESS);
+        logger.log(Level.INFO, "New reader was registered: " + reader.toString());
+        return Paths.REDIRECT_START_PAGE;
     }
 }

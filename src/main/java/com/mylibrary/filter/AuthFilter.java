@@ -4,7 +4,8 @@ import java.util.List;
 import javax.servlet.*;
 import java.io.IOException;
 import java.util.ArrayList;
-import javax.servlet.http.HttpSession;
+import com.mylibrary.model.User;
+import com.mylibrary.action.Attributes;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -25,8 +26,8 @@ public class AuthFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletResponse resp = (HttpServletResponse) response;
         HttpServletRequest req = (HttpServletRequest) request;
-        HttpSession session = req.getSession();
-        if(session.getAttribute("user") == null && !allowedURLs.contains(req.getPathInfo())) {
+        if(req.getSession().getAttribute(Attributes.USER) == null && !allowedURLs.contains(req.getPathInfo())) {
+            req.getSession().setAttribute(Attributes.ROLE, User.Role.GUEST);
             request.getRequestDispatcher("/index.jsp").forward(req, resp);
             return;
         }

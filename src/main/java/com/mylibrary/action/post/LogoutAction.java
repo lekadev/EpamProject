@@ -9,6 +9,6 @@ public class LogoutAction implements Action {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         req.getSession().invalidate();
-        return Paths.SHOW_START_PAGE;
+        return Paths.REDIRECT_START_PAGE;
     }
 }

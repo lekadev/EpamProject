@@ -2,9 +2,9 @@ package com.mylibrary.listener;
 
 import java.util.Map;
 import java.util.Locale;
+import com.mylibrary.dao.LabelsDao;
 import com.mylibrary.db.ConnectionPool;
 import com.mylibrary.action.Attributes;
-import com.mylibrary.service.LabelsService;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
@@ -17,7 +17,7 @@ public class SessionListener implements HttpSessionListener {
         String defaultLanguage = LANGUAGE_EN;
         event.getSession().setAttribute(Attributes.LANGUAGE, defaultLanguage);
         ConnectionPool pool = ConnectionPool.getInstance();
-        Map<String, String> labels = new LabelsService(pool).initLabelData(new Locale(defaultLanguage));
+        Map<String, String> labels = new LabelsDao(pool).initLabelData(new Locale(defaultLanguage));
         event.getSession().setAttribute(Attributes.LABELS, labels);
     }
 

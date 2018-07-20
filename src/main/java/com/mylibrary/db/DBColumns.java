@@ -24,5 +24,7 @@ public class DBColumns {
     public static final String ORDER_DATE = "date";
     public static final String ORDER_STATUS = "status";
 
-    public static final String STATUS_DESCRIPTION = "description";
+    public static final String LABEL_NAME = "label";
+    public static final String LABEL_TEXT = "text";
+
 }

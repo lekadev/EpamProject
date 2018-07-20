@@ -7,10 +7,12 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import com.mylibrary.db.DBColumns;
 import com.mylibrary.db.ConnectionPool;
+import com.mylibrary.dao.exception.DaoException;
 
 public class UserDao extends EntityDao<Integer, User> {
 
     private ConnectionPool pool;
+    private Connection connection;
     private final static Logger logger = Logger.getLogger(UserDao.class);
     private final static String SELECT_BY_ID = "SELECT * FROM library.user_view WHERE id_user=?";
     private final static String SELECT_BY_EMAIL = "SELECT * FROM library.user_view WHERE email=?";
@@ -18,25 +20,28 @@ public class UserDao extends EntityDao<Integer, User> {
     private final static String UPDATE_LIBRARIAN = "UPDATE library.librarian SET name_first=?, name_last=?, number_phone=? WHERE id_user=?";
     private final static String UPDATE_READER = "UPDATE library.reader SET name_first=?, name_last=? WHERE id_user=?";
     private final static String UPDATE_PASSWORD = "UPDATE library.user SET password=? WHERE id_user=?";
-
+    private final static String INSERT_USER = "INSERT INTO library.user (email, password, role) VALUES (?, ?, ?)";
+    private final static String INSERT_READER = "INSERT INTO library.reader(name_first, name_last, date_registered, id_user) VALUES (?, ?, ?, ?)";
 
     public UserDao(ConnectionPool pool) {
         this.pool = pool;
     }
 
-    @Override
-    public List<User> findAll() {
-        throw new UnsupportedOperationException();
+    public UserDao(Connection connection) {
+        this.connection = connection;
     }
 
     @Override
-    public User findById(Integer id) {
+    public List<User> findAll() throws DaoException {
+        throw new DaoException(new UnsupportedOperationException());
+    }
+
+    @Override
+    public User findById(Integer id) throws DaoException {
         User user = null;
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
+        PreparedStatement statement;
+        ResultSet resultSet;
         try {
-            connection = pool.takeConnection();
             statement = connection.prepareStatement(SELECT_BY_ID);
             statement.setInt(1, id);
             resultSet = statement.executeQuery();
@@ -45,25 +50,23 @@ public class UserDao extends EntityDao<Integer, User> {
             }
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to find user by id", e);
-        } finally {
-            pool.closeConnection(connection, statement, resultSet);
+            throw new DaoException();
         }
         return user;
     }
 
     @Override
-    public int deleteById(Integer id) {
-        throw new UnsupportedOperationException();
+    public void deleteById(Integer id) throws DaoException {
+        throw new DaoException(new UnsupportedOperationException());
     }
 
     @Override
-    public Integer create(User user) {
-        throw new UnsupportedOperationException();
+    public Integer create(User user) throws DaoException {
+        throw new DaoException(new UnsupportedOperationException());
     }
 
     @Override
-    public int update(User user) {
-        int rowsUpdated = 0;
+    public void update(User user) throws DaoException {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
@@ -75,25 +78,25 @@ public class UserDao extends EntityDao<Integer, User> {
                     statement.setString(2, user.getNameLast());
                     statement.setString(3, ((Librarian)user).getNumberPhone());
                     statement.setInt(4, user.getId());
-                    rowsUpdated = statement.executeUpdate();
+                    statement.executeUpdate();
                     break;
                 case READER:
                     statement = connection.prepareStatement(UPDATE_READER);
                     statement.setString(1, user.getNameFirst());
                     statement.setString(2, user.getNameLast());
                     statement.setInt(3, user.getId());
-                    rowsUpdated = statement.executeUpdate();
+                    statement.executeUpdate();
                     break;
             }
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to update user", e);
+            throw new DaoException();
         } finally {
             pool.closeConnection(connection, statement);
         }
-        return rowsUpdated;
     }
 
-    public boolean isRegistered(String email) {
+    public boolean isRegistered(String email) throws DaoException {
         boolean isRegistered = true;
         Connection connection = null;
         PreparedStatement statement = null;
@@ -107,14 +110,15 @@ public class UserDao extends EntityDao<Integer, User> {
                 isRegistered = false;
             }
         } catch (SQLException e) {
-            logger.log(Level.ERROR, "Unable to check email", e);
+            logger.log(Level.ERROR, "Unable to check user by email", e);
+            throw new DaoException();
         } finally {
             pool.closeConnection(connection, statement, resultSet);
         }
         return isRegistered;
     }
 
-    public User findByEmailAndPassword(String email, String password) {
+    public User findByEmailAndPassword(String email, String password) throws DaoException {
         User user = null;
         Connection connection = null;
         PreparedStatement statement = null;
@@ -130,14 +134,14 @@ public class UserDao extends EntityDao<Integer, User> {
             }
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to find user by email and password", e);
+            throw new DaoException();
         } finally {
             pool.closeConnection(connection, statement, resultSet);
         }
         return user;
     }
 
-    public int changePassword(User user) {
-        int rowsUpdated = 0;
+    public void changePassword(User user) throws DaoException {
         Connection connection = null;
         PreparedStatement statement = null;
         try {
@@ -145,16 +149,57 @@ public class UserDao extends EntityDao<Integer, User> {
             statement = connection.prepareStatement(UPDATE_PASSWORD);
             statement.setString(1, user.getPassword());
             statement.setInt(2, user.getId());
-            rowsUpdated = statement.executeUpdate();
+            statement.executeUpdate();
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to update password", e);
+            throw new DaoException();
         } finally {
             pool.closeConnection(connection, statement);
         }
-        return rowsUpdated;
     }
 
-    private User retrieveUser(ResultSet resultSet) {
+    public Integer createUser(User user) throws DaoException {
+        PreparedStatement statement;
+        ResultSet generatedKey;
+        int idUser = 0;
+        try {
+            statement = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, user.getEmail());
+            statement.setString(2, user.getPassword());
+            statement.setString(3, user.getRole().toString());
+            statement.executeUpdate();
+            generatedKey = statement.getGeneratedKeys();
+            if(generatedKey.next()) {
+                idUser = generatedKey.getInt(1);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "Unable to execute new user insertion", e);
+            throw new DaoException();
+        }
+        return idUser;
+    }
+
+    public void createReader(Reader reader) throws DaoException {
+        PreparedStatement statement;
+        ResultSet generatedKey;
+        try {
+            statement = connection.prepareStatement(INSERT_READER, Statement.RETURN_GENERATED_KEYS);
+            statement.setString(1, reader.getNameFirst());
+            statement.setString(2, reader.getNameLast());
+            statement.setDate(3, (Date) reader.getDateRegistered());
+            statement.setInt(4, reader.getId());
+            statement.executeUpdate();
+            generatedKey = statement.getGeneratedKeys();
+            if(generatedKey.next()) {
+                generatedKey.getInt(1);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "Unable to execute new reader insertion", e);
+            throw new DaoException();
+        }
+    }
+
+    private User retrieveUser(ResultSet resultSet) throws DaoException {
         User user = new User();
         try {
             User.Role role = User.Role.valueOf(resultSet.getString(DBColumns.USER_ROLE).toUpperCase());
@@ -174,6 +219,7 @@ public class UserDao extends EntityDao<Integer, User> {
             user.setRole(role);
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to parse result set for user", e);
+            throw new DaoException();
         }
         return user;
     }

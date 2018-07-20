@@ -16,10 +16,10 @@ public class ActionFactory {
         actionsMap.put("/logout", new LogoutAction());
         actionsMap.put("/start", new ShowStartPageAction());
         actionsMap.put("/show-catalogue", new ShowCatalogueAction());
-        actionsMap.put("/edit-profile", new ShowEditPageAction());
-        actionsMap.put("/show-book", new ShowBookAction());
+        actionsMap.put("/edit-profile", new ShowProfileFormAction());
+        actionsMap.put("/show-book", new ShowBookInfoAction());
         actionsMap.put("/change-password", new ChangePasswordAction());
-        actionsMap.put("/change-info", new ChangeInfoAction());
+        actionsMap.put("/change-profile-info", new ChangeProfileInfoAction());
         actionsMap.put("/order-book", new OrderBookAction());
         actionsMap.put("/cancel-order", new CancelOrderAction());
         actionsMap.put("/change-status", new ChangeOrderStatusAction());
@@ -29,13 +29,15 @@ public class ActionFactory {
         actionsMap.put("/new-reader", new ShowReaderFormAction());
         actionsMap.put("/register", new RegisterReaderAction());
         actionsMap.put("/change-lang", new ChangeLanguageAction());
+        actionsMap.put("/edit-book", new ShowBookFormAction());
+        actionsMap.put("/change-book-info", new ChangeBookInfoAction());
     }
 
     public static Action defineAction(HttpServletRequest req) {
         String actionPath = req.getPathInfo();
         Action action = actionsMap.get(actionPath);
         if(action == null) {
-            action = new NoAction();
+            return new EmptyAction();
         }
         return action;
     }

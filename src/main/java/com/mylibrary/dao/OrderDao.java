@@ -2,59 +2,78 @@ package com.mylibrary.dao;
 
 import java.sql.*;
 import java.util.List;
-import java.util.Locale;
 import java.util.ArrayList;
-import com.mylibrary.model.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import com.mylibrary.model.Book;
+import com.mylibrary.model.User;
+import com.mylibrary.model.Order;
 import com.mylibrary.db.DBColumns;
 import com.mylibrary.db.ConnectionPool;
+import java.net.UnknownServiceException;
+import com.mylibrary.dao.exception.DaoException;
 
 public class OrderDao extends EntityDao<Integer, Order> {
 
     private ConnectionPool pool;
+    private Connection connection;
     private final static Logger logger = Logger.getLogger(OrderDao.class);
-    private final static String SELECT_ALL = "SELECT * FROM library.order JOIN order_status USING(id_status) JOIN locale USING(id_locale) WHERE name_locale=? ORDER BY date DESC";
-    private final static String SELECT_BY_USER_ID = "SELECT * FROM library.order JOIN order_status USING(id_status) JOIN locale USING(id_locale) WHERE id_user=? AND name_locale=? ORDER BY date DESC";
-    private final static String UPDATE_STATUS_BY_ORDER_ID = "UPDATE library.order SET id_status=? WHERE id_order=?";
+    private final static String SELECT_ALL = "SELECT * FROM library.order ORDER BY date DESC";
+    private final static String SELECT_BY_USER_ID = "SELECT * FROM library.order WHERE id_user=? ORDER BY date DESC";
+    private final static String UPDATE_STATUS_BY_ORDER_ID = "UPDATE library.order SET status=? WHERE id_order=?";
     private final static String DELETE_BY_ORDER_ID = "DELETE FROM library.order WHERE id_order=?";
-    private final static String INSERT = "INSERT INTO library.order (id_book, id_user, id_status) VALUES(?, ?, ?)";
-
+    private final static String INSERT = "INSERT INTO library.order (id_book, id_user, status) VALUES(?, ?, ?)";
 
     public OrderDao(ConnectionPool pool) {
         this.pool = pool;
     }
-
-    @Override
-    public List<Order> findAll() {
-        throw new UnsupportedOperationException();
+    public OrderDao(Connection connection) {
+        this.connection = connection;
     }
 
     @Override
-    public Order findById(Integer id) {
-        throw new UnsupportedOperationException();
+    public List<Order> findAll() throws DaoException {
+        List<Order> orders = new ArrayList<>();
+        PreparedStatement statement;
+        ResultSet resultSet;
+        try {
+            statement = connection.prepareStatement(SELECT_ALL);
+            resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Order order = retrieveOrder(resultSet);
+                orders.add(order);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.ERROR, "Unable to get list of all orders", e);
+            throw new DaoException();
+        }
+        return orders;
     }
 
     @Override
-    public int deleteById(Integer idOrder) {
+    public Order findById(Integer id) throws DaoException {
+        throw new DaoException(new UnsupportedOperationException());
+    }
+
+    @Override
+    public void deleteById(Integer idOrder) throws DaoException {
         Connection connection = null;
         PreparedStatement statement = null;
-        int rowsUpdated = 0;
         try {
             connection = pool.takeConnection();
             statement = connection.prepareStatement(DELETE_BY_ORDER_ID);
             statement.setInt(1, idOrder);
-            rowsUpdated = statement.executeUpdate();
+            statement.executeUpdate();
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to delete order" ,e);
+            throw new DaoException();
         } finally {
             pool.closeConnection(connection, statement);
         }
-        return rowsUpdated;
     }
 
     @Override
-    public Integer create(Order order) {
+    public Integer create(Order order) throws DaoException {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet generatedKey = null;
@@ -64,7 +83,7 @@ public class OrderDao extends EntityDao<Integer, Order> {
             statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, order.getBook().getId());
             statement.setInt(2, order.getUser().getId());
-            statement.setInt(3, order.getStatus().getId());
+            statement.setString(3, String.valueOf(order.getStatus()));
             statement.executeUpdate();
             generatedKey = statement.getGeneratedKeys();
             if(generatedKey.next()) {
@@ -72,6 +91,7 @@ public class OrderDao extends EntityDao<Integer, Order> {
             }
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to insert order", e);
+            throw new DaoException();
         } finally {
             pool.closeConnection(connection, statement, generatedKey);
         }
@@ -79,42 +99,17 @@ public class OrderDao extends EntityDao<Integer, Order> {
     }
 
     @Override
-    public int update(Order entity) {
-        throw new UnsupportedOperationException();
+    public void update(Order entity) throws DaoException {
+        throw new DaoException(new UnknownServiceException());
     }
 
-    public List<Order> findAllOrders(Locale locale) {
+    public List<Order> findOrdersOfUser(User user) throws DaoException {
         List<Order> orders = new ArrayList<>();
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
+        PreparedStatement statement;
+        ResultSet resultSet;
         try {
-            connection = pool.takeConnection();
-            statement = connection.prepareStatement(SELECT_ALL);
-            statement.setString(1, locale.getLanguage());
-            resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                Order order = retrieveOrder(resultSet);
-                orders.add(order);
-            }
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Unable to get list of all orders", e);
-        } finally {
-            pool.closeConnection(connection, statement, resultSet);
-        }
-        return orders;
-    }
-
-    public List<Order> findOrdersOfUser(User user, Locale locale) {
-        List<Order> orders = new ArrayList<>();
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = pool.takeConnection();
             statement = connection.prepareStatement(SELECT_BY_USER_ID);
             statement.setInt(1, user.getId());
-            statement.setString(2, locale.getLanguage());
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Order order = retrieveOrder(resultSet);
@@ -123,47 +118,43 @@ public class OrderDao extends EntityDao<Integer, Order> {
             }
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to get user's list of orders", e);
-        } finally {
-            pool.closeConnection(connection, statement, resultSet);
+            throw new DaoException();
         }
         return orders;
     }
 
-    public int changeStatus(int idOrder, Order.OrderStatus status) {
+    public void changeStatus(int idOrder, Order.OrderStatus status) throws DaoException {
         Connection connection = null;
         PreparedStatement statement = null;
-        int rowsUpdated = 0;
         try {
             connection = pool.takeConnection();
             statement = connection.prepareStatement(UPDATE_STATUS_BY_ORDER_ID);
-            statement.setInt(1, status.getId());
+            statement.setString(1, String.valueOf(status));
             statement.setInt(2, idOrder);
-            rowsUpdated = statement.executeUpdate();
+            statement.executeUpdate();
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to update status", e);
+            throw new DaoException();
         } finally {
             pool.closeConnection(connection, statement);
         }
-        return rowsUpdated;
     }
 
-    private Order retrieveOrder(ResultSet resultSet) {
+    private Order retrieveOrder(ResultSet resultSet) throws DaoException {
         Order order = new Order();
         User user = new User();
         Book book = new Book();
-        Order.OrderStatus status;
         try {
             order.setId(resultSet.getInt(DBColumns.ORDER_ID));
             order.setDate(resultSet.getDate(DBColumns.ORDER_DATE));
-            status = Order.OrderStatus.valueOf(resultSet.getString(DBColumns.ORDER_STATUS).toUpperCase());
-            status.setDescription(resultSet.getString(DBColumns.STATUS_DESCRIPTION));
-            order.setStatus(status);
+            order.setStatus(Order.OrderStatus.valueOf(resultSet.getString(DBColumns.ORDER_STATUS)));
             book.setId(resultSet.getInt(DBColumns.BOOK_ID));
             user.setId(resultSet.getInt(DBColumns.USER_ID));
             order.setBook(book);
             order.setUser(user);
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to parse result set for order", e);
+            throw new DaoException();
         }
         return order;
     }

@@ -44,30 +44,11 @@ public class Order extends Entity {
     }
 
     public enum OrderStatus {
-        PENDING(1),
-        RETURNED(2),
-        LONG_LOAN(3),
-        SHORT_LOAN(4),
-        DENIED(5);
-
-        int id;
-        String description;
-
-        OrderStatus(int id) {
-            this.id = id;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
+        PENDING,
+        RETURNED,
+        LONG_LOAN,
+        SHORT_LOAN,
+        DENIED
     }
 
     @Override
@@ -75,7 +56,7 @@ public class Order extends Entity {
         return "Order ID#" + super.getId() +
                 "\n" + user.toString() +
                 "\n" + book.toString() +
-                "\nStatus: " + status.getDescription() +
+                "\nStatus: " + status.toString() +
                 "\nOrdered on : " + date;
     }
 }

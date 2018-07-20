@@ -7,58 +7,53 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import com.mylibrary.model.Book;
 import com.mylibrary.model.Author;
-import com.mylibrary.dao.BookDao;
-import com.mylibrary.dao.AuthorDao;
 import com.mylibrary.db.ConnectionPool;
 import com.mylibrary.service.BookService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import com.mylibrary.validator.InputValidator;
+import com.mylibrary.action.exception.ActionException;
+import com.mylibrary.service.exception.ServiceException;
 
 public class AddBookAction implements Action {
 
     private final static Logger logger = Logger.getLogger(AddBookAction.class);
 
     @Override
-    public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        String resultPage = Paths.SHOW_CATALOGUE;
-        req.getSession().removeAttribute(Attributes.BOOK_INPUT_MESSAGE);
+    public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionException {
         String title = req.getParameter(Parameters.BOOK_TITLE);
         String publisher = req.getParameter(Parameters.BOOK_PUBLISHER);
-        String numberParameter = req.getParameter(Parameters.BOOK_COPIES);
-        String[] idAuthorParams = req.getParameterValues(Parameters.AUTHORS_SELECTED);
-        boolean fieldsValid = InputValidator.validateText(title) && InputValidator.validateText(publisher) && InputValidator.validateInteger(numberParameter);
+        String numberCopiesString = req.getParameter(Parameters.BOOK_COPIES);
+        String[] idAuthorsSelected = req.getParameterValues(Parameters.AUTHORS_SELECTED);
+        boolean fieldsValid = InputValidator.isTextValid(title) && InputValidator.isTextValid(publisher) && InputValidator.isIntegerValid(numberCopiesString);
         if(!fieldsValid) {
-            req.getSession().setAttribute(Attributes.BOOK_INPUT_MESSAGE, ErrorMessages.TEXT_INPUT_ERROR);
-            return resultPage;
+            req.getSession().setAttribute(Attributes.BOOK_ADD_MESSAGE, ErrorMessages.TEXT_INPUT_ERROR);
+            return Paths.REDIRECT_CATALOGUE;
         }
-        if(idAuthorParams == null) {
-            req.getSession().setAttribute(Attributes.BOOK_INPUT_MESSAGE, ErrorMessages.NO_AUTHOR_ERROR);
-            return resultPage;
+        if(idAuthorsSelected == null) {
+            req.getSession().setAttribute(Attributes.BOOK_ADD_MESSAGE, ErrorMessages.NO_AUTHOR_ERROR);
+            return Paths.REDIRECT_CATALOGUE;
         }
         List<Author> authors = new ArrayList<>();
-        for(String stringId : idAuthorParams) {
-            int id = Integer.parseInt(stringId);
+        for(String stringId : idAuthorsSelected) {
             Author author = new Author();
-            author.setId(id);
+            author.setId(Integer.parseInt(stringId));
             authors.add(author);
         }
         Book newBook = new Book();
+        newBook.setAuthors(authors);
         newBook.setTitle(title);
         newBook.setPublisher(publisher);
-        newBook.setNumberCopies(Integer.parseInt(numberParameter));
-        newBook.setAuthors(authors);
+        newBook.setNumberCopies(Integer.parseInt(numberCopiesString));
         ConnectionPool pool = ConnectionPool.getInstance();
-        int idBook = new BookService(pool).addBook(newBook);
-        if(idBook != 0) {
-            List<Book> catalogue = new BookDao(pool).findAll();
-            for(Book book : catalogue) {
-                book.setAuthors(new AuthorDao(pool).findAuthorsOfBook(book.getId()));
-            }
-            req.getServletContext().setAttribute(Attributes.CATALOGUE, catalogue);
-            req.getSession().setAttribute(Attributes.BOOK_INPUT_MESSAGE, ErrorMessages.BOOK_SUCCESS_MESSAGE);
-            logger.log(Level.INFO, "New book was added: " + newBook.toString());
+        BookService bookService = new BookService(pool);
+        try {
+            bookService.createBook(newBook);
+        } catch (ServiceException e) {
+            throw new ActionException();
         }
-        return resultPage;
+        req.getSession().setAttribute(Attributes.BOOK_ADD_MESSAGE, ErrorMessages.BOOK_ADD_SUCCESS);
+        logger.log(Level.INFO, "New book was added: ID#" + newBook.getId() + " " + newBook.getTitle());
+        return Paths.REDIRECT_CATALOGUE;
     }
 }

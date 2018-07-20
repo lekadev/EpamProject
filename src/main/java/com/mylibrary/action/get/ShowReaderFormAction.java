@@ -8,6 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 public class ShowReaderFormAction implements Action {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
-        return Paths.NEW_READER_FORM_PAGE;
+        return Paths.PAGE_NEW_READER_FORM;
     }
 }
