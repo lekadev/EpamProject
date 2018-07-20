@@ -11,13 +11,11 @@ import com.mylibrary.db.ConnectionPool;
 
 public class LabelsDao {
 
-    private ConnectionPool pool;
+    private ConnectionPool pool = ConnectionPool.getInstance();
     private final static Logger logger = Logger.getLogger(LabelsDao.class);
     private final static String SELECT_ALL = "SELECT * FROM library.label JOIN locale USING(id_locale) WHERE name_locale=?";
 
-    public LabelsDao() {
-        this.pool = ConnectionPool.getInstance();
-    }
+    public LabelsDao() { }
 
     public Map<String, String> initLabelData(Locale locale) {
         Map<String, String> labels = new HashMap<>();

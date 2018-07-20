@@ -11,8 +11,8 @@ import com.mylibrary.dao.exception.DaoException;
 
 public class UserDao extends EntityDao<Integer, User> {
 
-    private ConnectionPool pool;
     private Connection connection;
+    private ConnectionPool pool = ConnectionPool.getInstance();
     private final static Logger logger = Logger.getLogger(UserDao.class);
     private final static String SELECT_BY_ID = "SELECT * FROM library.user_view WHERE id_user=?";
     private final static String SELECT_BY_EMAIL = "SELECT * FROM library.user_view WHERE email=?";
@@ -23,9 +23,7 @@ public class UserDao extends EntityDao<Integer, User> {
     private final static String INSERT_USER = "INSERT INTO library.user (email, password, role) VALUES (?, ?, ?)";
     private final static String INSERT_READER = "INSERT INTO library.reader(name_first, name_last, date_registered, id_user) VALUES (?, ?, ?, ?)";
 
-    public UserDao() {
-        this.pool = ConnectionPool.getInstance();
-    }
+    public UserDao() { }
 
     public UserDao(Connection connection) {
         this.connection = connection;

@@ -14,12 +14,10 @@ import com.mylibrary.service.exception.ServiceException;
 
 public class BookService {
 
-    private ConnectionPool pool;
+    private ConnectionPool pool = ConnectionPool.getInstance();
     private final static Logger logger = Logger.getLogger(BookService.class);
 
-    public BookService() {
-        this.pool = ConnectionPool.getInstance();
-    }
+    public BookService() { }
 
     public List<Book> findAllBooks() throws ServiceException {
         List<Book> books;

@@ -11,12 +11,10 @@ import com.mylibrary.service.exception.ServiceException;
 
 public class UserService {
 
-    private ConnectionPool pool;
+    private ConnectionPool pool  = ConnectionPool.getInstance();
     private final static Logger logger = Logger.getLogger(UserService.class);
 
-    public UserService() {
-        this.pool = ConnectionPool.getInstance();
-    }
+    public UserService() { }
 
     public void createReader(Reader reader) throws ServiceException {
         Connection connection = null;

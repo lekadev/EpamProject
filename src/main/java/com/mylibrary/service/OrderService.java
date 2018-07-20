@@ -12,12 +12,10 @@ import com.mylibrary.service.exception.ServiceException;
 
 public class OrderService {
 
-    private ConnectionPool pool;
+    private ConnectionPool pool = ConnectionPool.getInstance();
     private final static Logger logger = Logger.getLogger(OrderService.class);
 
-    public OrderService() {
-        this.pool = ConnectionPool.getInstance();
-    }
+    public OrderService() { }
 
     public List<Order> findAllOrders() throws ServiceException {
         List<Order> orders;

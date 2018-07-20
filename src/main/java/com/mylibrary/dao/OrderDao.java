@@ -15,8 +15,8 @@ import com.mylibrary.dao.exception.DaoException;
 
 public class OrderDao extends EntityDao<Integer, Order> {
 
-    private ConnectionPool pool;
     private Connection connection;
+    private ConnectionPool pool = ConnectionPool.getInstance();
     private final static Logger logger = Logger.getLogger(OrderDao.class);
     private final static String SELECT_ALL = "SELECT * FROM library.order ORDER BY date DESC";
     private final static String SELECT_BY_USER_ID = "SELECT * FROM library.order WHERE id_user=? ORDER BY date DESC";
@@ -24,9 +24,7 @@ public class OrderDao extends EntityDao<Integer, Order> {
     private final static String DELETE_BY_ORDER_ID = "DELETE FROM library.order WHERE id_order=?";
     private final static String INSERT = "INSERT INTO library.order (id_book, id_user, status) VALUES(?, ?, ?)";
 
-    public OrderDao() {
-        this.pool = ConnectionPool.getInstance();
-    }
+    public OrderDao() { }
     public OrderDao(Connection connection) {
         this.connection = connection;
     }
