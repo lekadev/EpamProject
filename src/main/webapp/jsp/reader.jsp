@@ -35,7 +35,10 @@
                 <c:forEach var="order" items="${orders}">
                     <tr>
                         <td>${order.id}</td>
-                        <td>${order.book.title}</td>
+                        <td><a href="${pageContext.request.contextPath}/controller/show-book?idBook=${order.book.id}">
+                                ${order.book.title}
+                            </a>
+                        </td>
                         <td>
                             <c:forEach var="author" items="${order.book.authors}" varStatus="authorStatus">
                                 <c:out value="${author.nameFirst} ${author.nameLast}"/>${!authorStatus.last ? ',' : ''}
@@ -45,7 +48,7 @@
                             <fmt:setLocale value="${language}"/>
                             <fmt:formatDate value="${order.date}"/>
                         </td>
-                        <td><my:order-status orderStatus="${order.status}"/>
+                        <td class="nolinebreak"><my:order-status orderStatus="${order.status}"/>
                             <c:if test="${order.status == 'PENDING'}">
                                 <div id="cancel-order-btn">
                                     <form id="cancel-order-form" method="POST" action="${pageContext.request.contextPath}/controller/cancel-order">
