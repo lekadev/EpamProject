@@ -1,7 +1,7 @@
 package com.mylibrary.dao.test;
 
 import java.sql.Connection;
-import com.mylibrary.model.Book;
+import com.mylibrary.entity.Book;
 import com.mylibrary.dao.BookDao;
 import com.mylibrary.db.ConnectionPool;
 import static junit.framework.TestCase.assertTrue;
@@ -12,8 +12,8 @@ public class BookDaoTest {
 
     private Book book;
     private BookDao dao;
-    private Connection connection;
     private ConnectionPool pool;
+    private Connection connection;
 
     @org.junit.Before
     public void setUp() throws Exception {

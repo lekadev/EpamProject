@@ -3,8 +3,8 @@ package com.mylibrary.action.post;
 import java.util.List;
 import java.util.ArrayList;
 import com.mylibrary.action.*;
-import com.mylibrary.model.Book;
-import com.mylibrary.model.Author;
+import com.mylibrary.entity.Book;
+import com.mylibrary.entity.Author;
 import com.mylibrary.dao.AuthorDao;
 import com.mylibrary.service.BookService;
 import javax.servlet.http.HttpServletRequest;
@@ -19,7 +19,7 @@ public class ChangeBookInfoAction implements Action {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionException {
         String idBookString = req.getParameter(Parameters.BOOK_ID);
-        if(idBookString == null) {
+        if (idBookString == null) {
             throw new ActionException();
         }
         int idBook = Integer.parseInt(idBookString);
@@ -30,7 +30,7 @@ public class ChangeBookInfoAction implements Action {
         } catch (ServiceException e) {
             throw new ActionException();
         }
-        if(bookOld == null) {
+        if (bookOld == null) {
             throw new ActionException();
         }
         req.getSession().setAttribute(Attributes.BOOK, bookOld);
@@ -38,17 +38,17 @@ public class ChangeBookInfoAction implements Action {
         String publisherNew = req.getParameter(Parameters.BOOK_PUBLISHER);
         String numberCopiesNew = req.getParameter(Parameters.BOOK_COPIES);
         boolean fieldsValid = InputValidator.isTextValid(titleNew) && InputValidator.isTextValid(publisherNew) && InputValidator.isIntegerValid(numberCopiesNew);
-        if(!fieldsValid) {
+        if (!fieldsValid) {
             req.getSession().setAttribute(Attributes.BOOK_UPDATE_MESSAGE, ErrorMessages.TEXT_INPUT_ERROR);
             return Paths.REDIRECT_BOOK_EDIT_FORM;
         }
         String[] idAuthorsSelected = req.getParameterValues(Parameters.AUTHORS_SELECTED);
-        if(idAuthorsSelected == null) {
+        if (idAuthorsSelected == null) {
             req.getSession().setAttribute(Attributes.BOOK_UPDATE_MESSAGE, ErrorMessages.NO_AUTHOR_ERROR);
             return Paths.REDIRECT_BOOK_EDIT_FORM;
         }
         List<Author> authorsNew = new ArrayList<>();
-        for(String idAuthor : idAuthorsSelected) {
+        for (String idAuthor : idAuthorsSelected) {
             Author author;
             try {
                 author = new AuthorDao().findById(Integer.parseInt(idAuthor));
@@ -63,7 +63,7 @@ public class ChangeBookInfoAction implements Action {
         bookNew.setPublisher(publisherNew);
         bookNew.setNumberCopies(Integer.parseInt(numberCopiesNew));
         bookNew.setAuthors(authorsNew);
-        if(bookNew.equals(bookOld)) {
+        if (bookNew.equals(bookOld)) {
             return Paths.REDIRECT_BOOK_EDIT_FORM;
         }
         try {

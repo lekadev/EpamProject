@@ -4,8 +4,8 @@ import java.sql.*;
 import java.util.List;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import com.mylibrary.model.Book;
-import com.mylibrary.model.Author;
+import com.mylibrary.entity.Book;
+import com.mylibrary.entity.Author;
 import com.mylibrary.dao.BookDao;
 import com.mylibrary.dao.AuthorDao;
 import com.mylibrary.db.ConnectionPool;
@@ -14,8 +14,8 @@ import com.mylibrary.service.exception.ServiceException;
 
 public class BookService {
 
-    private ConnectionPool pool = ConnectionPool.getInstance();
     private final static Logger logger = Logger.getLogger(BookService.class);
+    private ConnectionPool pool = ConnectionPool.getInstance();
 
     public BookService() { }
 
@@ -28,7 +28,7 @@ public class BookService {
             BookDao bookDao = new BookDao(connection);
             AuthorDao authorDao = new AuthorDao(connection);
             books = bookDao.findAll();
-            for(Book book : books) {
+            for (Book book : books) {
                 List<Author> authors = authorDao.findAuthorsOfBook(book);
                 book.setAuthors(authors);
             }
@@ -60,7 +60,7 @@ public class BookService {
             BookDao bookDao = new BookDao(connection);
             AuthorDao authorDao = new AuthorDao(connection);
             book = bookDao.findById(idBook);
-            if(book != null) {
+            if (book != null) {
                 List<Author> authors = authorDao.findAuthorsOfBook(book);
                 book.setAuthors(authors);
             }

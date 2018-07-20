@@ -2,7 +2,7 @@ package com.mylibrary.dao;
 
 import java.sql.*;
 import java.util.List;
-import com.mylibrary.model.*;
+import com.mylibrary.entity.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import com.mylibrary.db.DBColumns;
@@ -11,9 +11,9 @@ import com.mylibrary.dao.exception.DaoException;
 
 public class UserDao extends EntityDao<Integer, User> {
 
-    private Connection connection;
-    private ConnectionPool pool = ConnectionPool.getInstance();
+
     private final static Logger logger = Logger.getLogger(UserDao.class);
+
     private final static String SELECT_BY_ID = "SELECT * FROM library.user_view WHERE id_user=?";
     private final static String SELECT_BY_EMAIL = "SELECT * FROM library.user_view WHERE email=?";
     private final static String SELECT_BY_EMAIL_AND_PASSWORD = "SELECT * FROM library.user_view WHERE email=? AND password=?";
@@ -22,6 +22,9 @@ public class UserDao extends EntityDao<Integer, User> {
     private final static String UPDATE_PASSWORD = "UPDATE library.user SET password=? WHERE id_user=?";
     private final static String INSERT_USER = "INSERT INTO library.user (email, password, role) VALUES (?, ?, ?)";
     private final static String INSERT_READER = "INSERT INTO library.reader(name_first, name_last, date_registered, id_user) VALUES (?, ?, ?, ?)";
+
+    private Connection connection;
+    private ConnectionPool pool = ConnectionPool.getInstance();
 
     public UserDao() { }
 
@@ -104,7 +107,7 @@ public class UserDao extends EntityDao<Integer, User> {
             statement = connection.prepareStatement(SELECT_BY_EMAIL);
             statement.setString(1, email);
             resultSet  =statement.executeQuery();
-            if(!resultSet.next()) {
+            if (!resultSet.next()) {
                 isRegistered = false;
             }
         } catch (SQLException e) {
@@ -127,7 +130,7 @@ public class UserDao extends EntityDao<Integer, User> {
             statement.setString(1, email);
             statement.setString(2, password);
             resultSet = statement.executeQuery();
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 user = retrieveUser(resultSet);
             }
         } catch (SQLException e) {
@@ -167,7 +170,7 @@ public class UserDao extends EntityDao<Integer, User> {
             statement.setString(3, user.getRole().toString());
             statement.executeUpdate();
             generatedKey = statement.getGeneratedKeys();
-            if(generatedKey.next()) {
+            if (generatedKey.next()) {
                 idUser = generatedKey.getInt(1);
             }
         } catch (SQLException e) {
@@ -202,10 +205,12 @@ public class UserDao extends EntityDao<Integer, User> {
         try {
             User.Role role = User.Role.valueOf(resultSet.getString(DBColumns.USER_ROLE).toUpperCase());
             switch (role) {
-                case LIBRARIAN: user = new Librarian();
+                case LIBRARIAN:
+                    user = new Librarian();
                     ((Librarian) user).setNumberPhone((resultSet.getString(DBColumns.LIBRARIAN_NUMBER_PHONE)));
                     break;
-                case READER: user = new Reader();
+                case READER:
+                    user = new Reader();
                     ((Reader) user).setDateRegistered(resultSet.getDate(DBColumns.READER_DATE_REGISTERED));
                     break;
             }

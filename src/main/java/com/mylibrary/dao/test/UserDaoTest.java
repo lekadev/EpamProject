@@ -2,8 +2,8 @@ package com.mylibrary.dao.test;
 
 import static org.junit.Assert.*;
 import com.mylibrary.dao.UserDao;
-import com.mylibrary.model.User;
-import com.mylibrary.model.Librarian;
+import com.mylibrary.entity.User;
+import com.mylibrary.entity.Librarian;
 
 
 public class UserDaoTest {

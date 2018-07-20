@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import com.mylibrary.action.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import com.mylibrary.model.Book;
-import com.mylibrary.model.Author;
+import com.mylibrary.entity.Book;
+import com.mylibrary.entity.Author;
 import com.mylibrary.service.BookService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,16 +25,16 @@ public class AddBookAction implements Action {
         String numberCopiesString = req.getParameter(Parameters.BOOK_COPIES);
         String[] idAuthorsSelected = req.getParameterValues(Parameters.AUTHORS_SELECTED);
         boolean fieldsValid = InputValidator.isTextValid(title) && InputValidator.isTextValid(publisher) && InputValidator.isIntegerValid(numberCopiesString);
-        if(!fieldsValid) {
+        if (!fieldsValid) {
             req.getSession().setAttribute(Attributes.BOOK_ADD_MESSAGE, ErrorMessages.TEXT_INPUT_ERROR);
             return Paths.REDIRECT_CATALOGUE;
         }
-        if(idAuthorsSelected == null) {
+        if (idAuthorsSelected == null) {
             req.getSession().setAttribute(Attributes.BOOK_ADD_MESSAGE, ErrorMessages.NO_AUTHOR_ERROR);
             return Paths.REDIRECT_CATALOGUE;
         }
         List<Author> authors = new ArrayList<>();
-        for(String stringId : idAuthorsSelected) {
+        for (String stringId : idAuthorsSelected) {
             Author author = new Author();
             author.setId(Integer.parseInt(stringId));
             authors.add(author);

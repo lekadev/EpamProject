@@ -5,23 +5,25 @@ import java.util.List;
 import java.util.ArrayList;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import com.mylibrary.model.Book;
-import com.mylibrary.model.Author;
+import com.mylibrary.entity.Book;
+import com.mylibrary.entity.Author;
 import com.mylibrary.db.DBColumns;
 import com.mylibrary.db.ConnectionPool;
 import com.mylibrary.dao.exception.DaoException;
 
 public class AuthorDao extends EntityDao<Integer, Author> {
 
-    private Connection connection;
-    private ConnectionPool pool = ConnectionPool.getInstance();
     private final static Logger logger = Logger.getLogger(AuthorDao.class);
+
     private final static String SELECT_ALL = "SELECT id_author, name_first, name_last FROM library.author";
     private final static String SELECT_BY_ID = "SELECT id_author, name_first, name_last FROM library.author WHERE id_author=?";
     private final static String SELECT_AUTHORS_OF_BOOK = "SELECT id_author, name_first, name_last FROM library.author JOIN library.book2author USING(id_author) WHERE id_book=?";
     private final static String INSERT_NEW_AUTHOR = "INSERT INTO library.author(name_first, name_last) VALUES(?, ?)";
     private final static String INSERT_AUTHOR_OF_BOOK = "INSERT INTO library.book2author(id_book, id_author) VALUES(?, ?)";
     private final static String DELETE_AUTHOR_OF_BOOK = "DELETE FROM library.book2author WHERE id_book=?";
+
+    private ConnectionPool pool = ConnectionPool.getInstance();
+    private Connection connection;
 
     public AuthorDao() { }
 
@@ -40,7 +42,7 @@ public class AuthorDao extends EntityDao<Integer, Author> {
             connection = pool.takeConnection();
             statement = connection.prepareStatement(SELECT_ALL);
             resultSet = statement.executeQuery();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 Author author = retrieveAuthor(resultSet);
                 authors.add(author);
             }
@@ -94,7 +96,7 @@ public class AuthorDao extends EntityDao<Integer, Author> {
             statement.setString(2, author.getNameLast());
             statement.executeUpdate();
             generatedKey = statement.getGeneratedKeys();
-            if(generatedKey.next()) {
+            if (generatedKey.next()) {
                 idAuthor = generatedKey.getInt(1);
             }
         } catch (SQLException e) {
@@ -119,7 +121,7 @@ public class AuthorDao extends EntityDao<Integer, Author> {
             statement = connection.prepareStatement(SELECT_AUTHORS_OF_BOOK);
             statement.setInt(1, book.getId());
             resultSet = statement.executeQuery();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 Author author = retrieveAuthor(resultSet);
                 authors.add(author);
             }
@@ -134,7 +136,7 @@ public class AuthorDao extends EntityDao<Integer, Author> {
         PreparedStatement statement;
         try {
             statement = connection.prepareStatement(INSERT_AUTHOR_OF_BOOK);
-            for(Author author : book.getAuthors()) {
+            for (Author author : book.getAuthors()) {
                 statement.setInt(1, book.getId());
                 statement.setInt(2, author.getId());
                 statement.addBatch();

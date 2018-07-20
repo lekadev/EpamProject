@@ -5,19 +5,21 @@ import java.util.List;
 import java.util.ArrayList;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import com.mylibrary.model.Book;
+import com.mylibrary.entity.Book;
 import com.mylibrary.db.DBColumns;
 import com.mylibrary.dao.exception.DaoException;
 
 
 public class BookDao extends EntityDao<Integer, Book> {
 
-    private Connection connection;
     private final static Logger logger = Logger.getLogger(BookDao.class);
+
     private final static String SELECT_ALL = "SELECT id_book, title, publisher, number_copies FROM library.book";
     private final static String SELECT_BY_ID = "SELECT id_book, title, publisher, number_copies FROM library.book WHERE id_book=?";
     private final static String UPDATE_BOOK_DETAILS = "UPDATE library.book SET title=?, publisher=?, number_copies=? WHERE id_book=?";
     private final static String INSERT = "INSERT INTO library.book(title, publisher, number_copies) VALUES(?, ?, ?)";
+
+    private Connection connection;
 
     public BookDao(Connection connection) {
         this.connection = connection;
@@ -78,7 +80,7 @@ public class BookDao extends EntityDao<Integer, Book> {
             statement.setInt(3, book.getNumberCopies());
             statement.executeUpdate();
             generatedKey = statement.getGeneratedKeys();
-            if(generatedKey.next()) {
+            if (generatedKey.next()) {
                 idBook = generatedKey.getInt(1);
             }
         } catch (SQLException e) {

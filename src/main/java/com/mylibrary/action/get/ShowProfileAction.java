@@ -1,8 +1,8 @@
 package com.mylibrary.action.get;
 
 import java.util.List;
-import com.mylibrary.model.User;
-import com.mylibrary.model.Order;
+import com.mylibrary.entity.User;
+import com.mylibrary.entity.Order;
 import com.mylibrary.action.Paths;
 import com.mylibrary.action.Action;
 import com.mylibrary.action.Attributes;
@@ -30,7 +30,8 @@ public class ShowProfileAction implements Action {
                     orders = orderService.findOrdersOfUser(user);
                     profilePage = Paths.PAGE_READER_PROFILE;
                     break;
-                case GUEST: profilePage = Paths.PAGE_START;
+                case GUEST:
+                    profilePage = Paths.PAGE_START;
                     break;
             }
         } catch (ServiceException e) {

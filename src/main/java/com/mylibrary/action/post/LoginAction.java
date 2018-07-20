@@ -1,6 +1,6 @@
 package com.mylibrary.action.post;
 
-import com.mylibrary.model.*;
+import com.mylibrary.entity.*;
 import com.mylibrary.action.*;
 import com.mylibrary.dao.UserDao;
 import javax.servlet.http.HttpServletRequest;

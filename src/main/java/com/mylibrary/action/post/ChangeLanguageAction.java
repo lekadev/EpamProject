@@ -16,7 +16,7 @@ public class ChangeLanguageAction implements Action {
     public String execute(HttpServletRequest req, HttpServletResponse resp) {
         String languageNew = req.getParameter(Parameters.LANGUAGE);
         String languageOld = (String) req.getSession().getAttribute(Attributes.LANGUAGE);
-        if(languageNew != null && !languageNew.equals(languageOld)) {
+        if (languageNew != null && !languageNew.equals(languageOld)) {
             req.getSession().setAttribute(Attributes.LANGUAGE, languageNew);
             Map<String, String> labels = new LabelsDao().initLabelData(new Locale(languageNew));
             req.getSession().setAttribute(Attributes.LABELS, labels);

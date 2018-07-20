@@ -5,9 +5,9 @@ import java.util.Calendar;
 import com.mylibrary.action.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import com.mylibrary.model.User;
+import com.mylibrary.entity.User;
 import com.mylibrary.dao.UserDao;
-import com.mylibrary.model.Reader;
+import com.mylibrary.entity.Reader;
 import com.mylibrary.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +24,7 @@ public class RegisterReaderAction implements Action {
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionException {
         String email = req.getParameter(Parameters.USER_EMAIL);
         boolean emailValid = InputValidator.isEmailValid(email);
-        if(!emailValid) {
+        if (!emailValid) {
             req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.EMAIL_INVALID_ERROR);
             return Paths.REDIRECT_READER_FORM;
         }
@@ -34,26 +34,26 @@ public class RegisterReaderAction implements Action {
         } catch (DaoException e) {
             throw new ActionException();
         }
-        if(isRegistered) {
+        if (isRegistered) {
             req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.EMAIL_EXIST_ERROR);
             return Paths.REDIRECT_READER_FORM;
         }
         String password = req.getParameter(Parameters.USER_PASSWORD);
         String passwordRepeated = req.getParameter(Parameters.USER_PASSWORD_REPEATED);
         boolean passwordValid = InputValidator.isPasswordValid(password);
-        if(!passwordValid) {
+        if (!passwordValid) {
             req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.PASSWORD_PATTERN_ERROR);
             return Paths.REDIRECT_READER_FORM;
         }
         boolean passwordsMatch = password.equals(passwordRepeated);
-        if(!passwordsMatch) {
+        if (!passwordsMatch) {
             req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.PASSWORD_MATCH_ERROR);
             return Paths.REDIRECT_READER_FORM;
         }
         String nameFirst = req.getParameter(Parameters.USER_NAME);
         String nameLast = req.getParameter(Parameters.USER_SURNAME);
         boolean fieldsValid = InputValidator.isTextValid(nameFirst) && InputValidator.isTextValid(nameLast);
-        if(!fieldsValid) {
+        if (!fieldsValid) {
             req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.TEXT_INPUT_ERROR);
             return Paths.REDIRECT_READER_FORM;
         }

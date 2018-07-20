@@ -3,7 +3,7 @@ package com.mylibrary.action.post;
 import com.mylibrary.action.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import com.mylibrary.model.Author;
+import com.mylibrary.entity.Author;
 import com.mylibrary.dao.AuthorDao;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +20,7 @@ public class AddAuthorAction implements Action {
         String nameFirst = req.getParameter(Parameters.AUTHOR_NAME);
         String nameLast = req.getParameter(Parameters.AUTHOR_SURNAME);
         boolean fieldsValid = InputValidator.isTextValid(nameFirst) && InputValidator.isTextValid(nameLast);
-        if(!fieldsValid) {
+        if (!fieldsValid) {
             req.getSession().setAttribute(Attributes.AUTHOR_ADD_MESSAGE, ErrorMessages.TEXT_INPUT_ERROR);
             return Paths.REDIRECT_AUTHOR_FORM;
         }

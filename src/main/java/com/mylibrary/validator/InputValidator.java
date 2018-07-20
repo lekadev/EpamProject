@@ -7,7 +7,7 @@ public class InputValidator {
 
     public static boolean isEmailValid(String email) {
         boolean isValid = false;
-        if(email != null) {
+        if (email != null) {
             final String emailRegex = "^[\\w-+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$";
             Pattern pattern = Pattern.compile(emailRegex);
             Matcher matcher = pattern.matcher(email);
@@ -18,7 +18,7 @@ public class InputValidator {
 
     public static boolean isPasswordValid(String password) {
         boolean isValid = false;
-        if(password != null) {
+        if (password != null) {
             final String passwordRegex = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$";
             Pattern pattern = Pattern.compile(passwordRegex);
             Matcher matcher = pattern.matcher(password);
@@ -33,7 +33,7 @@ public class InputValidator {
 
     public static boolean isNumberValid(String number) {
         boolean isValid = false;
-        if(number != null) {
+        if (number != null) {
             final String passwordRegex = "[0-9]+";
             Pattern pattern = Pattern.compile(passwordRegex);
             Matcher matcher = pattern.matcher(number);

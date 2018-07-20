@@ -12,7 +12,7 @@ public class CancelOrderAction implements Action {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionException {
         String idOrderString = req.getParameter(Parameters.ORDER_ID);
-        if(idOrderString == null) {
+        if (idOrderString == null) {
             throw new ActionException();
         }
         int idOrder = Integer.parseInt(idOrderString);

@@ -1,7 +1,7 @@
 package com.mylibrary.action.get;
 
 import com.mylibrary.action.*;
-import com.mylibrary.model.Book;
+import com.mylibrary.entity.Book;
 import com.mylibrary.service.BookService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -16,7 +16,7 @@ public class ShowBookInfoAction implements Action {
         String resultPage = null;
         String idParameter = req.getParameter(Parameters.BOOK_ID);
         boolean idValid = InputValidator.isIntegerValid(idParameter);
-        if(idValid) {
+        if (idValid) {
             int idBook = Integer.parseInt(idParameter);
             Book book;
             try {

@@ -3,7 +3,7 @@ package com.mylibrary.action.post;
 import com.mylibrary.action.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import com.mylibrary.model.User;
+import com.mylibrary.entity.User;
 import com.mylibrary.dao.UserDao;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,18 +20,18 @@ public class ChangePasswordAction implements Action {
         String password = req.getParameter(Parameters.USER_PASSWORD);
         String passwordRepeated = req.getParameter(Parameters.USER_PASSWORD_REPEATED);
         boolean passwordValid = InputValidator.isPasswordValid(password) && InputValidator.isPasswordValid(passwordRepeated);
-        if(!passwordValid) {
+        if (!passwordValid) {
             req.getSession().setAttribute(Attributes.PASSWORD_UPDATE_MESSAGE, ErrorMessages.PASSWORD_PATTERN_ERROR);
             return Paths.REDIRECT_PROFILE_EDIT_FORM;
         }
         boolean passwordsMatch = password.equals(passwordRepeated);
-        if(!passwordsMatch) {
+        if (!passwordsMatch) {
             req.getSession().setAttribute(Attributes.PASSWORD_UPDATE_MESSAGE, ErrorMessages.PASSWORD_MATCH_ERROR);
             return Paths.REDIRECT_PROFILE_EDIT_FORM;
         }
         User user = (User) req.getSession().getAttribute(Attributes.USER);
         boolean isUpdated = !user.getPassword().equals(String.valueOf(password.hashCode()));
-        if(!isUpdated) {
+        if (!isUpdated) {
             return Paths.REDIRECT_PROFILE_EDIT_FORM;
         }
         user.setPassword(String.valueOf(password.hashCode()));

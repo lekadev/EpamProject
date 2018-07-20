@@ -1,9 +1,9 @@
 package com.mylibrary.action.post;
 
 import com.mylibrary.action.*;
-import com.mylibrary.model.User;
+import com.mylibrary.entity.User;
 import com.mylibrary.dao.UserDao;
-import com.mylibrary.model.Librarian;
+import com.mylibrary.entity.Librarian;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.mylibrary.validator.InputValidator;

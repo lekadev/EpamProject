@@ -3,14 +3,13 @@ package com.mylibrary.listener;
 import javax.servlet.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import com.mylibrary.model.Order;
+import com.mylibrary.entity.Order;
 import com.mylibrary.db.ConnectionPool;
 import com.mylibrary.action.Attributes;
 
 public class ContextListener implements ServletContextListener {
 
     private final static Logger logger = Logger.getLogger(ContextListener.class);
-
     private ConnectionPool pool;
 
     @Override

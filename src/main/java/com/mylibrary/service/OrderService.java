@@ -3,7 +3,7 @@ package com.mylibrary.service;
 import java.sql.*;
 import java.util.List;
 import com.mylibrary.dao.*;
-import com.mylibrary.model.*;
+import com.mylibrary.entity.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import com.mylibrary.db.ConnectionPool;
@@ -12,8 +12,8 @@ import com.mylibrary.service.exception.ServiceException;
 
 public class OrderService {
 
-    private ConnectionPool pool = ConnectionPool.getInstance();
     private final static Logger logger = Logger.getLogger(OrderService.class);
+    private ConnectionPool pool = ConnectionPool.getInstance();
 
     public OrderService() { }
 
@@ -28,11 +28,11 @@ public class OrderService {
             BookDao bookDao = new BookDao(connection);
             AuthorDao authorDao = new AuthorDao(connection);
             orders = orderDao.findAll();
-            for(Order order : orders) {
+            for (Order order : orders) {
                 User user = userDao.findById(order.getUser().getId());
                 order.setUser(user);
                 Book book = bookDao.findById(order.getBook().getId());
-                if(book != null) {
+                if (book != null) {
                     List<Author> authors = authorDao.findAuthorsOfBook(book);
                     book.setAuthors(authors);
                     order.setBook(book);
@@ -67,10 +67,10 @@ public class OrderService {
             BookDao bookDao = new BookDao(connection);
             AuthorDao authorDao = new AuthorDao(connection);
             orders = orderDao.findOrdersOfUser(user);
-            for(Order order : orders) {
+            for (Order order : orders) {
                 order.setUser(user);
                 Book book = bookDao.findById(order.getBook().getId());
-                if(book != null) {
+                if (book != null) {
                     List<Author> authors = authorDao.findAuthorsOfBook(book);
                     book.setAuthors(authors);
                     order.setBook(book);

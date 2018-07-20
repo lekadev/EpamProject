@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.ArrayList;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import com.mylibrary.model.Book;
-import com.mylibrary.model.User;
-import com.mylibrary.model.Order;
+import com.mylibrary.entity.Book;
+import com.mylibrary.entity.User;
+import com.mylibrary.entity.Order;
 import com.mylibrary.db.DBColumns;
 import com.mylibrary.db.ConnectionPool;
 import java.net.UnknownServiceException;
@@ -15,16 +15,19 @@ import com.mylibrary.dao.exception.DaoException;
 
 public class OrderDao extends EntityDao<Integer, Order> {
 
-    private Connection connection;
-    private ConnectionPool pool = ConnectionPool.getInstance();
     private final static Logger logger = Logger.getLogger(OrderDao.class);
+
     private final static String SELECT_ALL = "SELECT * FROM library.order ORDER BY date DESC";
     private final static String SELECT_BY_USER_ID = "SELECT * FROM library.order WHERE id_user=? ORDER BY date DESC";
     private final static String UPDATE_STATUS_BY_ORDER_ID = "UPDATE library.order SET status=? WHERE id_order=?";
     private final static String DELETE_BY_ORDER_ID = "DELETE FROM library.order WHERE id_order=?";
     private final static String INSERT = "INSERT INTO library.order (id_book, id_user, status) VALUES(?, ?, ?)";
 
+    private ConnectionPool pool = ConnectionPool.getInstance();
+    private Connection connection;
+
     public OrderDao() { }
+
     public OrderDao(Connection connection) {
         this.connection = connection;
     }
@@ -84,7 +87,7 @@ public class OrderDao extends EntityDao<Integer, Order> {
             statement.setString(3, String.valueOf(order.getStatus()));
             statement.executeUpdate();
             generatedKey = statement.getGeneratedKeys();
-            if(generatedKey.next()) {
+            if (generatedKey.next()) {
                 idOrder = generatedKey.getInt(1);
             }
         } catch (SQLException e) {

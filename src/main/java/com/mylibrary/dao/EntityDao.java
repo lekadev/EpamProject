@@ -1,7 +1,7 @@
 package com.mylibrary.dao;
 
 import java.util.List;
-import com.mylibrary.model.Entity;
+import com.mylibrary.entity.Entity;
 import com.mylibrary.dao.exception.DaoException;
 
 public abstract class EntityDao<K, T extends Entity> {

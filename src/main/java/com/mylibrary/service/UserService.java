@@ -4,15 +4,15 @@ import java.sql.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import com.mylibrary.dao.UserDao;
-import com.mylibrary.model.Reader;
+import com.mylibrary.entity.Reader;
 import com.mylibrary.db.ConnectionPool;
 import com.mylibrary.dao.exception.DaoException;
 import com.mylibrary.service.exception.ServiceException;
 
 public class UserService {
 
-    private ConnectionPool pool  = ConnectionPool.getInstance();
     private final static Logger logger = Logger.getLogger(UserService.class);
+    private ConnectionPool pool  = ConnectionPool.getInstance();
 
     public UserService() { }
 

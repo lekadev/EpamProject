@@ -2,7 +2,7 @@ package com.mylibrary.tag;
 
 import java.util.List;
 import java.io.IOException;
-import com.mylibrary.model.Order;
+import com.mylibrary.entity.Order;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
@@ -16,7 +16,7 @@ public class NoOrdersTag extends SimpleTagSupport {
 
     @Override
     public void doTag() throws IOException, JspException {
-        if(orders.size() == 0) {
+        if (orders.size() == 0) {
             getJspBody().invoke(null);
         }
     }

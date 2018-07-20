@@ -26,7 +26,7 @@ public class ConnectionPool {
     private String url;
 
     public static ConnectionPool getInstance() {
-        if(!isCreated) {
+        if (!isCreated) {
             synchronized (ConnectionPool.class) {
                 poolInstance = new ConnectionPool();
                 isCreated = true;
@@ -48,7 +48,7 @@ public class ConnectionPool {
     private void initPoolData() {
         availableConnections = new ArrayBlockingQueue<>(poolSize);
         givenAwayConnections = new ArrayBlockingQueue<>(poolSize);
-        for(int i = 0; i < poolSize; i++) {
+        for (int i = 0; i < poolSize; i++) {
             try {
                 Connection connection = DriverManager.getConnection(url, login, password);
                 PooledConnection pooledConnection = new PooledConnection(connection);
@@ -74,21 +74,21 @@ public class ConnectionPool {
 
     public void closeConnection(Connection con, PreparedStatement pst, ResultSet rs) {
         try {
-            if(con != null) {
+            if (con != null) {
                 con.close();
             }
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to return connection to the pool", e);
         }
         try {
-            if(pst != null) {
+            if (pst != null) {
                 pst.close();
             }
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to close statement", e);
         }
         try {
-            if(rs != null) {
+            if (rs != null) {
                 rs.close();
             }
         } catch (SQLException e) {
@@ -98,14 +98,14 @@ public class ConnectionPool {
 
     public void closeConnection(Connection con, PreparedStatement pst) {
         try {
-            if(con != null) {
+            if (con != null) {
                 con.close();
             }
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to return connection to the pool", e);
         }
         try {
-            if(pst != null) {
+            if (pst != null) {
                 pst.close();
             }
         } catch (SQLException e) {
@@ -115,7 +115,7 @@ public class ConnectionPool {
 
     public void closeConnection(Connection con) {
         try {
-            if(con != null) {
+            if (con != null) {
                 con.close();
             }
         } catch (SQLException e) {
@@ -130,10 +130,10 @@ public class ConnectionPool {
 
     private void disposeConnectionsQueue(BlockingQueue<Connection> queue) {
         Connection connection;
-        while((connection = queue.poll()) != null) {
+        while ((connection = queue.poll()) != null) {
             try {
                 connection.commit();
-                ((PooledConnection)connection).reallyClose();
+                ((PooledConnection) connection).reallyClose();
             } catch (SQLException e) {
                 logger.log(Level.ERROR, "Unable to close connection", e);
             }
@@ -155,16 +155,16 @@ public class ConnectionPool {
 
         @Override
         public void close() throws SQLException {
-            if(connection.isClosed()) {
+            if (connection.isClosed()) {
                 throw new SQLException("Connection has already been closed.");
             }
-            if(connection.isReadOnly()) {
+            if (connection.isReadOnly()) {
                 connection.setReadOnly(false);
             }
-            if(!givenAwayConnections.remove(this)) {
+            if (!givenAwayConnections.remove(this)) {
                 throw new SQLException("Unable to remove connection from the queue of given away connections.");
             }
-            if(!availableConnections.offer(this)) {
+            if (!availableConnections.offer(this)) {
                 throw new SQLException("Unable to return used connection to the queue of available connections");
             }
         }

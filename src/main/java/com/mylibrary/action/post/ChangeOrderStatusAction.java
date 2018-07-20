@@ -1,6 +1,6 @@
 package com.mylibrary.action.post;
 
-import com.mylibrary.model.*;
+import com.mylibrary.entity.*;
 import com.mylibrary.action.*;
 import com.mylibrary.dao.OrderDao;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +14,7 @@ public class ChangeOrderStatusAction implements Action {
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionException {
         String idParameter = req.getParameter(Parameters.ORDER_ID);
         String statusParameter = req.getParameter(Parameters.ORDER_STATUS);
-        if(idParameter == null || statusParameter == null) {
+        if (idParameter == null || statusParameter == null) {
             throw new ActionException();
         }
         int idOrder = Integer.parseInt(idParameter);
