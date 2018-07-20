@@ -3,7 +3,6 @@ package com.mylibrary.action.post;
 import com.mylibrary.model.*;
 import com.mylibrary.action.*;
 import com.mylibrary.dao.UserDao;
-import com.mylibrary.db.ConnectionPool;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.mylibrary.validator.InputValidator;
@@ -21,10 +20,9 @@ public class LoginAction implements Action {
             req.getSession().setAttribute(Attributes.LOGIN_MESSAGE, ErrorMessages.TEXT_INPUT_ERROR);
             return Paths.REDIRECT_START_PAGE;
         }
-        ConnectionPool pool = ConnectionPool.getInstance();
         User user;
         try {
-            user = new UserDao(pool).findByEmailAndPassword(email, String.valueOf(password.hashCode()));
+            user = new UserDao().findByEmailAndPassword(email, String.valueOf(password.hashCode()));
         } catch (DaoException e) {
             throw new ActionException();
         }

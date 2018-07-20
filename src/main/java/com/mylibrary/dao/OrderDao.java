@@ -24,8 +24,8 @@ public class OrderDao extends EntityDao<Integer, Order> {
     private final static String DELETE_BY_ORDER_ID = "DELETE FROM library.order WHERE id_order=?";
     private final static String INSERT = "INSERT INTO library.order (id_book, id_user, status) VALUES(?, ?, ?)";
 
-    public OrderDao(ConnectionPool pool) {
-        this.pool = pool;
+    public OrderDao() {
+        this.pool = ConnectionPool.getInstance();
     }
     public OrderDao(Connection connection) {
         this.connection = connection;

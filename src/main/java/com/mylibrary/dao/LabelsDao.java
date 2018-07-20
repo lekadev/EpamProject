@@ -15,8 +15,8 @@ public class LabelsDao {
     private final static Logger logger = Logger.getLogger(LabelsDao.class);
     private final static String SELECT_ALL = "SELECT * FROM library.label JOIN locale USING(id_locale) WHERE name_locale=?";
 
-    public LabelsDao(ConnectionPool pool) {
-        this.pool = pool;
+    public LabelsDao() {
+        this.pool = ConnectionPool.getInstance();
     }
 
     public Map<String, String> initLabelData(Locale locale) {

@@ -23,8 +23,8 @@ public class AuthorDao extends EntityDao<Integer, Author> {
     private final static String INSERT_AUTHOR_OF_BOOK = "INSERT INTO library.book2author(id_book, id_author) VALUES(?, ?)";
     private final static String DELETE_AUTHOR_OF_BOOK = "DELETE FROM library.book2author WHERE id_book=?";
 
-    public AuthorDao(ConnectionPool pool) {
-        this.pool = pool;
+    public AuthorDao() {
+        this.pool = ConnectionPool.getInstance();
     }
 
     public AuthorDao(Connection connection) {

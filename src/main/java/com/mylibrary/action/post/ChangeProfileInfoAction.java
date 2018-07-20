@@ -4,7 +4,6 @@ import com.mylibrary.action.*;
 import com.mylibrary.model.User;
 import com.mylibrary.dao.UserDao;
 import com.mylibrary.model.Librarian;
-import com.mylibrary.db.ConnectionPool;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.mylibrary.validator.InputValidator;
@@ -40,8 +39,7 @@ public class ChangeProfileInfoAction implements Action {
         if (user.getRole() == User.Role.LIBRARIAN) {
             ((Librarian) user).setNumberPhone(numberPhoneNew);
         }
-        ConnectionPool pool = ConnectionPool.getInstance();
-        UserDao userDao = new UserDao(pool);
+        UserDao userDao = new UserDao();
         try {
             userDao.update(user);
         } catch (DaoException e) {

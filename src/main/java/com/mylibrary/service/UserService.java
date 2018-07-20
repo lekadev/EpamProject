@@ -14,8 +14,8 @@ public class UserService {
     private ConnectionPool pool;
     private final static Logger logger = Logger.getLogger(UserService.class);
 
-    public UserService(ConnectionPool pool) {
-        this.pool = pool;
+    public UserService() {
+        this.pool = ConnectionPool.getInstance();
     }
 
     public void createReader(Reader reader) throws ServiceException {

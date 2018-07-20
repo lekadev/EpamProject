@@ -8,7 +8,6 @@ import org.apache.log4j.Logger;
 import com.mylibrary.model.User;
 import com.mylibrary.dao.UserDao;
 import com.mylibrary.model.Reader;
-import com.mylibrary.db.ConnectionPool;
 import com.mylibrary.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -29,10 +28,9 @@ public class RegisterReaderAction implements Action {
             req.getSession().setAttribute(Attributes.REGISTRATION_MESSAGE, ErrorMessages.EMAIL_INVALID_ERROR);
             return Paths.REDIRECT_READER_FORM;
         }
-        ConnectionPool pool = ConnectionPool.getInstance();
         boolean isRegistered;
         try {
-            isRegistered = new UserDao(pool).isRegistered(email);
+            isRegistered = new UserDao().isRegistered(email);
         } catch (DaoException e) {
             throw new ActionException();
         }
@@ -67,7 +65,7 @@ public class RegisterReaderAction implements Action {
         reader.setRole(User.Role.READER);
         java.sql.Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
         reader.setDateRegistered(currentDate);
-        UserService userService = new UserService(pool);
+        UserService userService = new UserService();
         try {
             userService.createReader(reader);
         } catch (ServiceException e) {

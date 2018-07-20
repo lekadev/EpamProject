@@ -1,9 +1,10 @@
-package com.mylibrary.dao;
+package com.mylibrary.dao.test;
 
-import com.mylibrary.db.ConnectionPool;
 import com.mylibrary.model.Author;
+import com.mylibrary.dao.AuthorDao;
 
 import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.assertNotNull;
 
 public class AuthorDaoTest {
 
@@ -12,8 +13,7 @@ public class AuthorDaoTest {
 
     @org.junit.Before
     public void setUp() {
-        ConnectionPool pool = ConnectionPool.getInstance();
-        dao = new AuthorDao(pool);
+        dao = new AuthorDao();
         author = new Author();
         author.setNameFirst("someName");
         author.setNameLast("someSurname");
@@ -32,18 +32,13 @@ public class AuthorDaoTest {
     }
 
     @org.junit.Test
-    public void findById() {
+    public void findById() throws Exception {
+        int idGenerated = dao.create(author);
+        assertNotNull(dao.findById(idGenerated));
     }
 
     @org.junit.Test
-    public void deleteById() {
-    }
-
-    @org.junit.Test
-    public void create() {
-    }
-
-    @org.junit.Test
-    public void update() {
+    public void create() throws Exception {
+        assertTrue(dao.create(author) != 0);
     }
 }

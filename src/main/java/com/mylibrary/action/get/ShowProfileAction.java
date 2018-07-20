@@ -6,7 +6,6 @@ import com.mylibrary.model.Order;
 import com.mylibrary.action.Paths;
 import com.mylibrary.action.Action;
 import com.mylibrary.action.Attributes;
-import com.mylibrary.db.ConnectionPool;
 import com.mylibrary.service.OrderService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,8 +18,7 @@ public class ShowProfileAction implements Action {
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionException {
         String profilePage = null;
         User user = (User) req.getSession().getAttribute(Attributes.USER);
-        ConnectionPool pool = ConnectionPool.getInstance();
-        OrderService orderService = new OrderService(pool);
+        OrderService orderService = new OrderService();
         List<Order> orders = null;
         try {
             switch (user.getRole()) {

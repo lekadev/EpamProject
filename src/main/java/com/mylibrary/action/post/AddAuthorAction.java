@@ -5,7 +5,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import com.mylibrary.model.Author;
 import com.mylibrary.dao.AuthorDao;
-import com.mylibrary.db.ConnectionPool;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.mylibrary.validator.InputValidator;
@@ -28,8 +27,7 @@ public class AddAuthorAction implements Action {
         Author newAuthor = new Author();
         newAuthor.setNameFirst(nameFirst);
         newAuthor.setNameLast(nameLast);
-        ConnectionPool pool = ConnectionPool.getInstance();
-        AuthorDao authorDao = new AuthorDao(pool);
+        AuthorDao authorDao = new AuthorDao();
         try {
             authorDao.create(newAuthor);
         } catch (DaoException e) {

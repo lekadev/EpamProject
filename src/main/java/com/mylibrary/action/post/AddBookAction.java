@@ -7,7 +7,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import com.mylibrary.model.Book;
 import com.mylibrary.model.Author;
-import com.mylibrary.db.ConnectionPool;
 import com.mylibrary.service.BookService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -45,8 +44,7 @@ public class AddBookAction implements Action {
         newBook.setTitle(title);
         newBook.setPublisher(publisher);
         newBook.setNumberCopies(Integer.parseInt(numberCopiesString));
-        ConnectionPool pool = ConnectionPool.getInstance();
-        BookService bookService = new BookService(pool);
+        BookService bookService = new BookService();
         try {
             bookService.createBook(newBook);
         } catch (ServiceException e) {

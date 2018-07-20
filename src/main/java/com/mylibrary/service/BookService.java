@@ -17,8 +17,8 @@ public class BookService {
     private ConnectionPool pool;
     private final static Logger logger = Logger.getLogger(BookService.class);
 
-    public BookService(ConnectionPool pool) {
-        this.pool = pool;
+    public BookService() {
+        this.pool = ConnectionPool.getInstance();
     }
 
     public List<Book> findAllBooks() throws ServiceException {

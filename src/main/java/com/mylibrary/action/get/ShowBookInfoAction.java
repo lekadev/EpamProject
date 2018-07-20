@@ -2,7 +2,6 @@ package com.mylibrary.action.get;
 
 import com.mylibrary.action.*;
 import com.mylibrary.model.Book;
-import com.mylibrary.db.ConnectionPool;
 import com.mylibrary.service.BookService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,10 +18,9 @@ public class ShowBookInfoAction implements Action {
         boolean idValid = InputValidator.isIntegerValid(idParameter);
         if(idValid) {
             int idBook = Integer.parseInt(idParameter);
-            ConnectionPool pool = ConnectionPool.getInstance();
             Book book;
             try {
-                book = new BookService(pool).findBookById(idBook);
+                book = new BookService().findBookById(idBook);
             } catch (ServiceException e) {
                 throw new ActionException();
             }

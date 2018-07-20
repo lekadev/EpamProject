@@ -6,7 +6,6 @@ import com.mylibrary.action.*;
 import com.mylibrary.model.Book;
 import com.mylibrary.model.Author;
 import com.mylibrary.dao.AuthorDao;
-import com.mylibrary.db.ConnectionPool;
 import com.mylibrary.service.BookService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,8 +23,7 @@ public class ChangeBookInfoAction implements Action {
             throw new ActionException();
         }
         int idBook = Integer.parseInt(idBookString);
-        ConnectionPool pool = ConnectionPool.getInstance();
-        BookService bookService = new BookService(pool);
+        BookService bookService = new BookService();
         Book bookOld;
         try {
             bookOld = bookService.findBookById(idBook);
@@ -53,7 +51,7 @@ public class ChangeBookInfoAction implements Action {
         for(String idAuthor : idAuthorsSelected) {
             Author author;
             try {
-                author = new AuthorDao(pool).findById(Integer.parseInt(idAuthor));
+                author = new AuthorDao().findById(Integer.parseInt(idAuthor));
             } catch (DaoException e) {
                 throw new ActionException();
             }

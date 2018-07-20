@@ -5,7 +5,6 @@ import com.mylibrary.action.*;
 import com.mylibrary.model.Book;
 import com.mylibrary.model.Author;
 import com.mylibrary.dao.AuthorDao;
-import com.mylibrary.db.ConnectionPool;
 import com.mylibrary.service.BookService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,12 +16,11 @@ public class ShowCatalogueAction implements Action {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionException {
-        ConnectionPool pool = ConnectionPool.getInstance();
         List<Book> catalogue;
         List<Author> allAuthors;
         try {
-            catalogue = new BookService(pool).findAllBooks();
-            allAuthors = new AuthorDao(pool).findAll();
+            catalogue = new BookService().findAllBooks();
+            allAuthors = new AuthorDao().findAll();
         } catch (ServiceException |DaoException e) {
             throw new ActionException();
         }

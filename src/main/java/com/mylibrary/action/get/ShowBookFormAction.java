@@ -4,7 +4,6 @@ import com.mylibrary.action.*;
 import com.mylibrary.model.Book;
 import com.mylibrary.model.Author;
 import com.mylibrary.dao.AuthorDao;
-import com.mylibrary.db.ConnectionPool;
 import com.mylibrary.service.BookService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,10 +19,9 @@ public class ShowBookFormAction implements Action {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionException {
         String resultPage = null;
-        ConnectionPool pool = ConnectionPool.getInstance();
         List<Author> allAuthors;
         try {
-            allAuthors = new AuthorDao(pool).findAll();
+            allAuthors = new AuthorDao().findAll();
         } catch (DaoException e) {
             throw new ActionException();
         }
@@ -34,7 +32,7 @@ public class ShowBookFormAction implements Action {
             int idBook = Integer.parseInt(idParameter);
             Book book;
             try {
-                book = new BookService(pool).findBookById(idBook);
+                book = new BookService().findBookById(idBook);
             } catch (ServiceException e) {
                 throw new ActionException();
             }

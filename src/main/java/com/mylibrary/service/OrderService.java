@@ -15,8 +15,8 @@ public class OrderService {
     private ConnectionPool pool;
     private final static Logger logger = Logger.getLogger(OrderService.class);
 
-    public OrderService(ConnectionPool pool) {
-        this.pool = pool;
+    public OrderService() {
+        this.pool = ConnectionPool.getInstance();
     }
 
     public List<Order> findAllOrders() throws ServiceException {

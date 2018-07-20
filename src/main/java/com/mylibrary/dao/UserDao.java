@@ -23,8 +23,8 @@ public class UserDao extends EntityDao<Integer, User> {
     private final static String INSERT_USER = "INSERT INTO library.user (email, password, role) VALUES (?, ?, ?)";
     private final static String INSERT_READER = "INSERT INTO library.reader(name_first, name_last, date_registered, id_user) VALUES (?, ?, ?, ?)";
 
-    public UserDao(ConnectionPool pool) {
-        this.pool = pool;
+    public UserDao() {
+        this.pool = ConnectionPool.getInstance();
     }
 
     public UserDao(Connection connection) {

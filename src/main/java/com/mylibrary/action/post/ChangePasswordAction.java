@@ -5,7 +5,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import com.mylibrary.model.User;
 import com.mylibrary.dao.UserDao;
-import com.mylibrary.db.ConnectionPool;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.mylibrary.validator.InputValidator;
@@ -36,8 +35,7 @@ public class ChangePasswordAction implements Action {
             return Paths.REDIRECT_PROFILE_EDIT_FORM;
         }
         user.setPassword(String.valueOf(password.hashCode()));
-        ConnectionPool pool = ConnectionPool.getInstance();
-        UserDao userDao = new UserDao(pool);
+        UserDao userDao = new UserDao();
         try {
             userDao.changePassword(user);
         } catch (DaoException e) {
