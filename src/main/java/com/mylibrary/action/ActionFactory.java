@@ -35,10 +35,6 @@ public class ActionFactory {
 
     public static Action defineAction(HttpServletRequest req) {
         String actionPath = req.getPathInfo();
-        Action action = actionsMap.get(actionPath);
-        if(action == null) {
-            return new EmptyAction();
-        }
-        return action;
+        return actionsMap.get(actionPath);
     }
 }
