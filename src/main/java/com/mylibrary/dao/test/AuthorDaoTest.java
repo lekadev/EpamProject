@@ -2,7 +2,6 @@ package com.mylibrary.dao.test;
 
 import com.mylibrary.model.Author;
 import com.mylibrary.dao.AuthorDao;
-
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.assertNotNull;
 

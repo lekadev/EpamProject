@@ -1,7 +1,6 @@
 package com.mylibrary.dao.test;
 
 import static org.junit.Assert.*;
-
 import com.mylibrary.dao.UserDao;
 import com.mylibrary.model.User;
 import com.mylibrary.model.Librarian;
