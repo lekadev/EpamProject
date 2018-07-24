@@ -1,7 +1,6 @@
 package com.epam.mylibrary.action.post;
 
 import com.epam.mylibrary.action.*;
-import com.epam.mylibrary.action.*;
 import com.epam.mylibrary.entity.User;
 import com.epam.mylibrary.dao.UserDao;
 import com.epam.mylibrary.entity.Librarian;

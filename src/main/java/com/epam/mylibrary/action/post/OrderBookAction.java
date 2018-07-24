@@ -1,14 +1,7 @@
 package com.epam.mylibrary.action.post;
 
-import com.epam.mylibrary.action.Action;
-import com.epam.mylibrary.action.Attributes;
-import com.epam.mylibrary.action.Parameters;
-import com.epam.mylibrary.action.Paths;
-import com.epam.mylibrary.entity.Book;
-import com.epam.mylibrary.entity.Order;
-import com.epam.mylibrary.entity.User;
-import com.epam.mylibrary.entity.*;
 import com.epam.mylibrary.action.*;
+import com.epam.mylibrary.entity.*;
 import com.epam.mylibrary.dao.OrderDao;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

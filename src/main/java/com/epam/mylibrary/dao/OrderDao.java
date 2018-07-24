@@ -3,12 +3,9 @@ package com.epam.mylibrary.dao;
 import java.sql.*;
 import java.util.List;
 import java.util.ArrayList;
-
-import com.epam.mylibrary.entity.Book;
-import com.epam.mylibrary.entity.Order;
-import com.epam.mylibrary.entity.User;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import com.epam.mylibrary.entity.*;
 import com.epam.mylibrary.db.DBColumns;
 import com.epam.mylibrary.db.ConnectionPool;
 import java.net.UnknownServiceException;
@@ -53,8 +50,8 @@ public class OrderDao extends EntityDao<Integer, Order> {
     }
 
     @Override
-    public Order findById(Integer id) throws DaoException {
-        throw new DaoException(new UnsupportedOperationException());
+    public Order findById(Integer id){
+        throw new UnsupportedOperationException();
     }
 
     @Override

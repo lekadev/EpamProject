@@ -1,7 +1,6 @@
 package com.epam.mylibrary.dao;
 
 import java.util.List;
-
 import com.epam.mylibrary.entity.Entity;
 import com.epam.mylibrary.dao.exception.DaoException;
 

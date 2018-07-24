@@ -2,15 +2,12 @@ package com.epam.mylibrary.action.post;
 
 import java.util.List;
 import java.util.ArrayList;
-
-import com.epam.mylibrary.action.*;
-import com.epam.mylibrary.service.BookService;
-import com.epam.mylibrary.action.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import com.epam.mylibrary.action.*;
 import com.epam.mylibrary.entity.Book;
 import com.epam.mylibrary.entity.Author;
-
+import com.epam.mylibrary.service.BookService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.epam.mylibrary.validator.InputValidator;

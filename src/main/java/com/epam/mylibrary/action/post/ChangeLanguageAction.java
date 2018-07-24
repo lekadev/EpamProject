@@ -2,7 +2,6 @@ package com.epam.mylibrary.action.post;
 
 import java.util.Map;
 import java.util.Locale;
-
 import com.epam.mylibrary.dao.LabelsDao;
 import com.epam.mylibrary.action.Paths;
 import com.epam.mylibrary.action.Action;

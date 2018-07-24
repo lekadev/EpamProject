@@ -2,10 +2,9 @@ package com.epam.mylibrary.dao;
 
 import java.sql.*;
 import java.util.List;
-
-import com.epam.mylibrary.entity.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import com.epam.mylibrary.entity.*;
 import com.epam.mylibrary.db.DBColumns;
 import com.epam.mylibrary.db.ConnectionPool;
 import com.epam.mylibrary.dao.exception.DaoException;

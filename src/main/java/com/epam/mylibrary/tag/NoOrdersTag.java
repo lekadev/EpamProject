@@ -2,9 +2,7 @@ package com.epam.mylibrary.tag;
 
 import java.util.List;
 import java.io.IOException;
-
 import com.epam.mylibrary.entity.Order;
-
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 

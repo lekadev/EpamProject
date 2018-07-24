@@ -2,22 +2,13 @@ package com.epam.mylibrary.service;
 
 import java.sql.*;
 import java.util.List;
-
-import com.epam.mylibrary.dao.AuthorDao;
-import com.epam.mylibrary.dao.BookDao;
-import com.epam.mylibrary.dao.OrderDao;
-import com.epam.mylibrary.dao.UserDao;
-import com.epam.mylibrary.dao.exception.DaoException;
-import com.epam.mylibrary.db.ConnectionPool;
-import com.epam.mylibrary.entity.Author;
-import com.epam.mylibrary.entity.Book;
-import com.epam.mylibrary.entity.Order;
-import com.epam.mylibrary.entity.User;
-import com.epam.mylibrary.service.exception.ServiceException;
-import com.epam.mylibrary.dao.*;
-import com.epam.mylibrary.entity.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import com.epam.mylibrary.dao.*;
+import com.epam.mylibrary.entity.*;
+import com.epam.mylibrary.db.ConnectionPool;
+import com.epam.mylibrary.dao.exception.DaoException;
+import com.epam.mylibrary.service.exception.ServiceException;
 
 public class OrderService {
 

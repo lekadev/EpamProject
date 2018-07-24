@@ -2,16 +2,13 @@ package com.epam.mylibrary.action.post;
 
 import java.sql.Date;
 import java.util.Calendar;
-
-import com.epam.mylibrary.action.*;
-import com.epam.mylibrary.service.UserService;
-import com.epam.mylibrary.action.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import com.epam.mylibrary.entity.User;
+import com.epam.mylibrary.action.*;
 import com.epam.mylibrary.dao.UserDao;
+import com.epam.mylibrary.entity.User;
 import com.epam.mylibrary.entity.Reader;
-
+import com.epam.mylibrary.service.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.epam.mylibrary.validator.InputValidator;

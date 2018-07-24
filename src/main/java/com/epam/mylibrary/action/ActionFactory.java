@@ -2,9 +2,6 @@ package com.epam.mylibrary.action;
 
 import java.util.Map;
 import java.util.HashMap;
-
-import com.epam.mylibrary.action.get.*;
-import com.epam.mylibrary.action.post.*;
 import com.epam.mylibrary.action.get.*;
 import com.epam.mylibrary.action.post.*;
 import javax.servlet.http.HttpServletRequest;

@@ -1,9 +1,8 @@
 package com.epam.mylibrary.action.post;
 
-import com.epam.mylibrary.action.*;
-import com.epam.mylibrary.action.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import com.epam.mylibrary.action.*;
 import com.epam.mylibrary.entity.Author;
 import com.epam.mylibrary.dao.AuthorDao;
 import javax.servlet.http.HttpServletRequest;

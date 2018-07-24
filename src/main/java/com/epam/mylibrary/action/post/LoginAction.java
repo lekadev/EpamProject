@@ -1,10 +1,8 @@
 package com.epam.mylibrary.action.post;
 
 import com.epam.mylibrary.action.*;
-import com.epam.mylibrary.entity.User;
-import com.epam.mylibrary.entity.*;
-import com.epam.mylibrary.action.*;
 import com.epam.mylibrary.dao.UserDao;
+import com.epam.mylibrary.entity.User;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.epam.mylibrary.validator.InputValidator;
