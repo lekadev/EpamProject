@@ -20,6 +20,7 @@ public class ConnectionPool {
     private BlockingQueue<Connection> availableConnections;
     private BlockingQueue<Connection> givenAwayConnections;
 
+    private String driverName;
     private String password;
     private int poolSize;
     private String login;
@@ -39,6 +40,7 @@ public class ConnectionPool {
     private ConnectionPool() {
         ResourceBundle bundle = ResourceBundle.getBundle(DBConfig.DB_FILENAME);
         this.poolSize = Integer.parseInt(bundle.getString(DBConfig.DB_POOL_SIZE));
+        this.driverName = bundle.getString(DBConfig.DB_DRIVER);
         this.url = bundle.getString(DBConfig.DB_URL);
         this.login = bundle.getString(DBConfig.DB_LOGIN);
         this.password = bundle.getString(DBConfig.DB_PASSWORD);
@@ -50,10 +52,11 @@ public class ConnectionPool {
         givenAwayConnections = new ArrayBlockingQueue<>(poolSize);
         for (int i = 0; i < poolSize; i++) {
             try {
+                Class.forName(driverName);
                 Connection connection = DriverManager.getConnection(url, login, password);
                 PooledConnection pooledConnection = new PooledConnection(connection);
                 availableConnections.add(pooledConnection);
-            } catch (SQLException e) {
+            } catch (SQLException | ClassNotFoundException e) {
                 logger.log(Level.ERROR, "Unable to initialize connection pool", e);
             }
         }
