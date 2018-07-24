@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="my" tagdir="/WEB-INF/tags"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -10,7 +10,7 @@
                 <div id="wrap-edit-form">
                     <form id="password-change-form" method="POST" action="${pageContext.request.contextPath}/controller/change-password">
                         <label class="label-input">${labels.email}: </label>
-                        <input class="input-field" type="email" name="email" disabled="disabled"value="${user.email}" />
+                        <input class="input-field" type="email" name="email" disabled="disabled" value="${user.email}" />
                         <label class="label-input">${labels.password}: </label>
                         <input class="input-field" type="password" name="password" value="${password}" required />
                         <label class="label-input">${labels.repeatPassword}: </label>
@@ -39,7 +39,7 @@
                         <div class="left-btn">
                             <button>${labels.confirm}</button>
                         </div>
-                    </form></br>
+                    </form><br/>
                     <my:language-form>
                         <jsp:attribute name="label">${labels.changeLang}</jsp:attribute>
                     </my:language-form>

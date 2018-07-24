@@ -5,11 +5,11 @@
 
 html, body {
 	background-color: white;
-	font-family: 'Trebuchet MS', 'Calibri';
+	font-family: 'Trebuchet MS', 'Calibri', serif;
 }
 
 #header {
-    font-family: 'Monotype Corsiva';
+	font-family: 'Monotype Corsiva', serif;
     font-size: 100px;
     color: white;
 	text-align: center;
@@ -32,7 +32,7 @@ html, body {
     width: 100%;
     color: white;
     font-size: 20px;
-    font-family: 'Arial';
+	font-family: 'Arial', serif;
     position: absolute;
 }
 
@@ -43,13 +43,13 @@ html, body {
 }
 
 #copyright{
-    font-family: 'Times New Roman';
+	font-family: 'Times New Roman', serif;
     font-size: 17px;
     margin-left: 10px;
 }
 
 select {
-    font-family: Calibri;
+	font-family: Calibri, serif;
     font-size: 20px;
 }
 
@@ -60,13 +60,12 @@ select {
 }
 
 #new-account {
-    margin: auto;
 	width: 400px;
 	text-align: center;
-	margin-top: 10px;
+	margin: 10px auto auto;
 }
 #choose-lang {
-    font-family: Calibri;
+	font-family: Calibri, serif;
     font-size: 20px;
     text-align: center;
     margin: auto;
@@ -74,7 +73,7 @@ select {
 }
 
 #choose-lang  select{
-    font-family: Calibri;
+	font-family: 'Calibri', serif;
     font-size: 20px;
 }
 #login-container{
@@ -109,7 +108,7 @@ select {
 
 #sign-in-btn  button {
 	width: 175px;
-	font-family: 'Calibri';
+	font-family: 'Calibri', serif;
 	font-size: 20px;
 }
 
@@ -121,13 +120,13 @@ select {
     border-radius: 4px;
     background-color: #f9f2ec;
     width: 250px;
-    font-family: Calibri;
+	font-family: Calibri, serif;
     font-size: 20px;
     display: block;
 }
 
 .label-input {
-    font-family: Calibri;
+	font-family: Calibri, serif;
     font-size: 20px;
 }
 
@@ -181,7 +180,6 @@ button {
 	background: brown;
 	cursor: pointer;
 	color: white;
-	width: fit	;
 	height: 30px;
 	font-family: inherit;
 	font-size: inherit;
@@ -283,8 +281,7 @@ button {
 #wrap-new-user-form {
 	border: 1px solid brown;
 	border-radius: 15px;
-	margin: auto;
-	margin-top: 20px;
+	margin: 20px auto auto;
 	width: 500px;
 	position: relative;
 }
@@ -298,8 +295,7 @@ button {
 }
 
 #new-user-form  .input-field {
-	margin-right: 0;
-	margin: 5px;
+	margin: 5px 0 5px 5px;
 }
 
 #new-user-form  .label-input {
