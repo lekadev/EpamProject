@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Random;
 import java.sql.Connection;
 import org.junit.Test;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import static org.junit.Assert.*;
@@ -17,8 +16,6 @@ public class BookDaoTest {
     private static Book book;
     private static BookDao dao;
     private static Random random;
-    private static ConnectionPool pool;
-    private static Connection connection;
 
 
     @BeforeClass
@@ -28,8 +25,8 @@ public class BookDaoTest {
         book.setPublisher("somePublisher");
         book.setNumberCopies(1);
         random = new Random();
-        pool = ConnectionPool.getInstance();
-        connection = pool.takeConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.takeConnection();
         dao = new BookDao(connection);
         int id = dao.create(book);
         book.setId(id);
@@ -39,11 +36,6 @@ public class BookDaoTest {
     public static void tearDownBeforeClass() {
         book = null;
         dao = null;
-    }
-
-    @After
-    public void tearDown() {
-        pool.closeConnection(connection);
     }
 
     @Test

@@ -5,7 +5,6 @@ import java.sql.Connection;
 import java.util.Random;
 import java.util.Calendar;
 import org.junit.Test;
-import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import static org.junit.Assert.*;
@@ -18,8 +17,6 @@ public class UserDaoTest {
 
     private static User user;
     private static UserDao dao;
-    private static ConnectionPool pool;
-    private static Connection connection;
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -31,8 +28,8 @@ public class UserDaoTest {
         user.setRole(User.Role.READER);
         Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
         ((Reader) user).setDateRegistered(currentDate);
-        pool = ConnectionPool.getInstance();
-        connection = pool.takeConnection();
+        ConnectionPool pool = ConnectionPool.getInstance();
+        Connection connection = pool.takeConnection();
         dao = new UserDao(connection);
         int id = dao.create(user);
         user.setId(id);
@@ -43,11 +40,6 @@ public class UserDaoTest {
     public static void tearDownBeforeClass() {
         user = null;
         dao = null;
-    }
-
-    @After
-    public void tearDown() {
-        pool.closeConnection(connection);
     }
 
     @Test(expected = UnsupportedOperationException.class)
