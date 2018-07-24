@@ -12,7 +12,7 @@ CREATE  TABLE `library`.`user` (
   `email` VARCHAR(45) NOT NULL ,
   `password` VARCHAR(100) NOT NULL ,
   `role` VARCHAR(45) NOT NULL ,
-  PRIMARY KEY (`id_user`) )
+  PRIMARY KEY (`id_user`))
 DEFAULT CHARACTER SET = ascii;
 
 
@@ -127,7 +127,7 @@ CREATE  TABLE `library`.`book2author` (
 
 
 -- -------------------------------------------------------------------------
--- Adding foreign keys to link books to auhtors---------------------------
+-- Adding foreign keys to link books to authors-----------------------------
 -- -------------------------------------------------------------------------
 ALTER TABLE `library`.`book2author`
   ADD CONSTRAINT `fk_book`

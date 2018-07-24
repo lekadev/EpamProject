@@ -10,7 +10,7 @@
     <uri>/WEB-INF/tld</uri>
     <tag>
         <name>ordersMessage</name>
-        <tag-class>com.mylibrary.tag.NoOrdersTag</tag-class>
+        <tag-class>com.epam.mylibrary.tag.NoOrdersTag</tag-class>
         <body-content>scriptless</body-content>
         <attribute>
             <name>orders</name>
