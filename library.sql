@@ -245,7 +245,7 @@ VALUES ('1', 'loginPage', 'Login page', '1'),
 ('18', 'emailHolder', 'Enter your email', '1'),
 ('18', 'emailHolder', 'Введите адрес', '2'),
 ('19', 'passwordHolder', 'Enter you password', '1'),
-('19', 'passwordHolder', 'Enter you password', '2'),
+('19', 'passwordHolder', 'Введите пароль', '2'),
 ('20', 'status', 'Current status', '1'),
 ('20', 'status', 'Состояние', '2'),
 ('21', 'changeStatus', 'Change status', '1'),
@@ -352,7 +352,7 @@ VALUES ('1', 'loginPage', 'Login page', '1'),
 ('72', 'registrationSuccess', 'Регистрация прошла успешно! Пожалуйста, авторизуйтесь', '2');
 
 INSERT INTO `library`.`book` (`title`, `publisher`, `number_copies`)
-VALUES ('Head First Java', 'O’Reilly Media', '1'),
+VALUES ('Head First Java', 'OReilly Media', '1'),
 ('Java 8. The complete reference', 'Oracle Press', '2'),
 ('Core Java Fundamentals vol.1', 'Prentica Hall', '1'),
 ('Core Java Fundamentals vol.2', 'Prentica Hall', '1'),
