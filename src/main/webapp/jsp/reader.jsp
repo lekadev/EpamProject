@@ -19,11 +19,9 @@
             <h2>${labels.ordersHistory}</h2>
         </div>
         <div class="orders-table">
-            <tr>
                 <custom:ordersMessage orders="${orders}">
                     ${labels.noOrders}
                 </custom:ordersMessage>
-            </tr>
             <table>
                 <tr>
                     <th>${labels.order} ID</th>

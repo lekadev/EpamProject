@@ -5,7 +5,8 @@ import java.util.Random;
 import org.junit.Test;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 import com.epam.mylibrary.entity.Book;
 import com.epam.mylibrary.entity.Author;
 import com.epam.mylibrary.dao.exception.DaoException;
@@ -32,23 +33,30 @@ public class AuthorDaoTest {
     @Test
     public void testFindAll() throws Exception {
         List<Author> authors = dao.findAll();
-        assertTrue(authors.size() >= 1);
-        assertTrue(authors.contains(author));
+        assertThat(authors, is(notNullValue()));
+        assertThat(authors.size(), greaterThanOrEqualTo(1));
+        assertThat(authors, hasItem(author));
     }
 
     @Test
     public void testFindById() throws Exception {
         Author foundAuthor = dao.findById(author.getId());
-        assertNotNull(foundAuthor);
-        assertEquals(author, foundAuthor);
+        assertThat(foundAuthor, is(notNullValue()));
+        assertThat(foundAuthor, is(author));
     }
 
     @Test
-    public void testFindByIdGivenInvalidNumber() throws Exception {
+    public void testFindByIdGivenZero() throws Exception {
         int idZero = 0;
+        Author foundAuthor = dao.findById(idZero);
+        assertThat(foundAuthor, is(nullValue()));
+    }
+
+    @Test
+    public void testFindByIdGivenNegativeNumber() throws Exception {
         int idNegative = -1;
-        assertNull(dao.findById(idZero));
-        assertNull(dao.findById(idNegative));
+        Author foundAuthor = dao.findById(idNegative);
+        assertThat(foundAuthor, is(nullValue()));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -61,9 +69,10 @@ public class AuthorDaoTest {
     public void testCreate() throws Exception {
         Author newAuthor = new Author("authorName", "authorSurname");
         int id = dao.create(newAuthor);
+        assertThat(id, is(not(0)));
         Author foundAuthor = dao.findById(id);
-        assertNotNull(foundAuthor);
-        assertEquals(newAuthor, foundAuthor);
+        assertThat(foundAuthor, is(notNullValue()));
+        assertThat(foundAuthor, is(newAuthor));
     }
 
     @Test(expected = DaoException.class)

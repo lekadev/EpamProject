@@ -4,8 +4,8 @@ import javax.servlet.*;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import com.epam.mylibrary.entity.Order;
+import com.epam.mylibrary.constants.Const;
 import com.epam.mylibrary.db.ConnectionPool;
-import com.epam.mylibrary.action.Attributes;
 
 public class ContextListener implements ServletContextListener {
 
@@ -18,7 +18,7 @@ public class ContextListener implements ServletContextListener {
         pool = ConnectionPool.getInstance();
         ServletContext context = event.getServletContext();
         Order.OrderStatus[] allStatuses = Order.OrderStatus.values();
-        context.setAttribute(Attributes.ALL_STATUSES, allStatuses);
+        context.setAttribute(Const.ALL_STATUSES, allStatuses);
     }
 
     @Override

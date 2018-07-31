@@ -17,7 +17,7 @@
 
     <servlet>
         <servlet-name>Controller</servlet-name>
-        <servlet-class>com.epam.mylibrary.controller.Controller</servlet-class>
+        <servlet-class>com.epam.mylibrary.controller.LibrarySystemController</servlet-class>
     </servlet>
 
     <servlet-mapping>

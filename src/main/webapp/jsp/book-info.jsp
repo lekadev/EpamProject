@@ -37,7 +37,7 @@
                         </c:when>
                         <c:when test="${user.role == 'LIBRARIAN'}">
                             <div class="left-btn">
-                                <a href="${pageContext.request.contextPath}/controller/edit-book?idBook=${book.id}">
+                                <a href="${pageContext.request.contextPath}/controller/edit-book">
                                     <button>${labels.edit}</button>
                                 </a>
                             </div>

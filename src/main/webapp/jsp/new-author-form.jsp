@@ -3,13 +3,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <my:template>
-    <jsp:attribute name="title"><title>Add new author</title></jsp:attribute>
+    <jsp:attribute name="title"><title>${labels.addAuthor}</title></jsp:attribute>
     <jsp:body>
         <div id="row">
             <div id="left-container">
                 <div id="wrap-edit-form">
                     <form id="add-author-form" method="POST" action="${pageContext.request.contextPath}/controller/add-author">
-                        <h3>${labels.addAuthor}:</h3>
+                        <h3>${labels.addAuthor}:</h3><br/>
                         <label class="label-input">${labels.name}: </label>
                         <input class="input-field" type="text" name="nameFirst"/>
                         <label class="label-input">${labels.surname}: </label>

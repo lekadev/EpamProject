@@ -9,8 +9,7 @@
             <div id="left-container">
                 <div id="wrap-edit-form">
                     <form id="book-edit-form" method="POST" action="${pageContext.request.contextPath}/controller/change-book-info">
-                        <input type="hidden" name="idBook" value="${book.id}"/>
-                        <h3>${labels.editBook}:</h3>
+                        <h3>${labels.editBook}:</h3><br/>
                         <label class="label-input">${labels.bookAuthors}: </label>
                         <div class="multiselect">
                             <div class="selectBox" onclick="showCheckboxes()">
@@ -27,7 +26,8 @@
                                     </label>
                                 </c:forEach>
                             </div>
-                        </div><br/>
+                        </div>
+                        <br/>
                         <label class="label-input">${labels.title}: </label>
                             <input class="input-field edit-field" type="text" name="title" value="${book.title}"/>
                         <label class="label-input">${labels.publisher}: </label>
@@ -36,9 +36,9 @@
                             <input class="input-field" type="text" name="numberCopies" value="${book.numberCopies}"/>
                         <br/>
                         <div id="error">
-                            ${labels[bookUpdateMessage]}
+                            ${labels[bookFormMessage]}
                         </div><br/>
-                        <c:remove var="bookUpdateMessage"/>
+                        <c:remove var="bookFormMessage"/>
                         <div class="left-btn">
                             <button>${labels.edit}</button>
                         </div>

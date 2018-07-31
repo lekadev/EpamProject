@@ -6,9 +6,8 @@ import java.util.ArrayList;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import com.epam.mylibrary.entity.*;
-import com.epam.mylibrary.db.DBColumns;
+import com.epam.mylibrary.constants.Const;
 import com.epam.mylibrary.db.ConnectionPool;
-import java.net.UnknownServiceException;
 import com.epam.mylibrary.dao.exception.DaoException;
 
 public class OrderDao extends EntityDao<Integer, Order> {
@@ -33,11 +32,8 @@ public class OrderDao extends EntityDao<Integer, Order> {
     @Override
     public List<Order> findAll() throws DaoException {
         List<Order> orders = new ArrayList<>();
-        PreparedStatement statement;
-        ResultSet resultSet;
-        try {
-            statement = connection.prepareStatement(SELECT_ALL);
-            resultSet = statement.executeQuery();
+        try(PreparedStatement statement = connection.prepareStatement(SELECT_ALL);
+                ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 Order order = retrieveOrder(resultSet);
                 orders.add(order);
@@ -56,65 +52,53 @@ public class OrderDao extends EntityDao<Integer, Order> {
 
     @Override
     public void deleteById(Integer idOrder) throws DaoException {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
-            connection = pool.takeConnection();
-            statement = connection.prepareStatement(DELETE_BY_ORDER_ID);
+        try(Connection connection = pool.takeConnection();
+                PreparedStatement statement = connection.prepareStatement(DELETE_BY_ORDER_ID)) {
             statement.setInt(1, idOrder);
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to delete order" ,e);
             throw new DaoException();
-        } finally {
-            pool.closeConnection(connection, statement);
         }
     }
 
     @Override
     public Integer create(Order order) throws DaoException {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet generatedKey = null;
         int idOrder = 0;
-        try {
-            connection = pool.takeConnection();
-            statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS);
+        try(Connection connection = pool.takeConnection();
+                PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, order.getBook().getId());
             statement.setInt(2, order.getUser().getId());
             statement.setString(3, String.valueOf(order.getStatus()));
             statement.executeUpdate();
-            generatedKey = statement.getGeneratedKeys();
+            ResultSet generatedKey = statement.getGeneratedKeys();
             if (generatedKey.next()) {
                 idOrder = generatedKey.getInt(1);
             }
+            generatedKey.close();
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to insert order", e);
             throw new DaoException();
-        } finally {
-            pool.closeConnection(connection, statement, generatedKey);
         }
         return idOrder;
     }
 
     @Override
     public void update(Order entity) throws DaoException {
-        throw new DaoException(new UnknownServiceException());
+        throw new DaoException(new UnsupportedOperationException());
     }
 
     public List<Order> findOrdersOfUser(User user) throws DaoException {
         List<Order> orders = new ArrayList<>();
-        PreparedStatement statement;
-        ResultSet resultSet;
-        try {
-            statement = connection.prepareStatement(SELECT_BY_USER_ID);
+        try(PreparedStatement statement = connection.prepareStatement(SELECT_BY_USER_ID)) {
             statement.setInt(1, user.getId());
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Order order = retrieveOrder(resultSet);
                 order.setUser(user);
                 orders.add(order);
             }
+            resultSet.close();
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to get user's list of orders", e);
             throw new DaoException();
@@ -123,19 +107,14 @@ public class OrderDao extends EntityDao<Integer, Order> {
     }
 
     public void changeStatus(int idOrder, Order.OrderStatus status) throws DaoException {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        try {
-            connection = pool.takeConnection();
-            statement = connection.prepareStatement(UPDATE_STATUS_BY_ORDER_ID);
+        try(Connection connection = pool.takeConnection();
+                PreparedStatement statement = connection.prepareStatement(UPDATE_STATUS_BY_ORDER_ID)) {
             statement.setString(1, String.valueOf(status));
             statement.setInt(2, idOrder);
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to update status", e);
             throw new DaoException();
-        } finally {
-            pool.closeConnection(connection, statement);
         }
     }
 
@@ -144,11 +123,11 @@ public class OrderDao extends EntityDao<Integer, Order> {
         User user = new User();
         Book book = new Book();
         try {
-            order.setId(resultSet.getInt(DBColumns.ORDER_ID));
-            order.setDate(resultSet.getDate(DBColumns.ORDER_DATE));
-            order.setStatus(Order.OrderStatus.valueOf(resultSet.getString(DBColumns.ORDER_STATUS)));
-            book.setId(resultSet.getInt(DBColumns.BOOK_ID));
-            user.setId(resultSet.getInt(DBColumns.USER_ID));
+            order.setId(resultSet.getInt(Const.ORDER_ID));
+            order.setDate(resultSet.getDate(Const.ORDER_DATE));
+            order.setStatus(Order.OrderStatus.valueOf(resultSet.getString(Const.ORDER_STATUS)));
+            book.setId(resultSet.getInt(Const.BOOK_ID));
+            user.setId(resultSet.getInt(Const.USER_ID));
             order.setBook(book);
             order.setUser(user);
         } catch (SQLException e) {

@@ -6,8 +6,9 @@ import java.util.Locale;
 import java.util.HashMap;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import com.epam.mylibrary.db.DBColumns;
+import com.epam.mylibrary.constants.Const;
 import com.epam.mylibrary.db.ConnectionPool;
+import com.epam.mylibrary.dao.exception.DaoException;
 
 public class LabelsDao {
 
@@ -19,25 +20,21 @@ public class LabelsDao {
 
     public LabelsDao() { }
 
-    public Map<String, String> initLabelData(Locale locale) {
+    public Map<String, String> initLabelData(Locale locale) throws DaoException {
         Map<String, String> labels = new HashMap<>();
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = pool.takeConnection();
-            statement = connection.prepareStatement(SELECT_ALL);
+        try(Connection connection = pool.takeConnection();
+                PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
             statement.setString(1, locale.getLanguage());
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
-                String label = resultSet.getString(DBColumns.LABEL_NAME);
-                String text = resultSet.getString(DBColumns.LABEL_TEXT);
+                String label = resultSet.getString(Const.LABEL_NAME);
+                String text = resultSet.getString(Const.LABEL_TEXT);
                 labels.put(label, text);
             }
+            resultSet.close();
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to load labels", e);
-        } finally {
-            pool.closeConnection(connection, statement, resultSet);
+            throw new DaoException();
         }
         return labels;
     }

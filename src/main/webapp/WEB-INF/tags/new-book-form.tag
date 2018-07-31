@@ -2,7 +2,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <form id="book-add-form" method="POST" action="${pageContext.request.contextPath}/controller/add-book">
-    <h3>${labels.addBook}:</h3>
+    <h3>${labels.addBook}:</h3><br/>
     <div id="wrap-book-add-form">
         <div id="book-block">
             <label class="label-input">${labels.title}: </label>
@@ -29,16 +29,16 @@
                         </label>
                     </c:forEach>
                 </div>
-            </div></br/>
+            </div><br/>
             <span>${labels.ifNoAuthor}
                 <a href="${pageContext.request.contextPath}/controller/new-author">${labels.addNewAuthor}</a>
             </span>
         </div>
     </div><br/>
     <div id="error">
-        ${labels[bookAddMessage]}
+        ${labels[bookFormMessage]}
     </div><br/>
-    <c:remove var="bookAddMessage"/>
+    <c:remove var="bookFormMessage"/>
     <div class="left-btn">
         <button>${labels.add}</button>
     </div>

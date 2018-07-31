@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <my:template>
-    <jsp:attribute name="title"><title>Edit profile</title></jsp:attribute>
+    <jsp:attribute name="title"><title>${labels.editProfile}</title></jsp:attribute>
     <jsp:body>
         <div id="row">
             <div id="left-container">
@@ -28,10 +28,7 @@
                         <input class="input-field" type="text" name="nameFirst" value="${user.nameFirst}" required />
                         <label class="label-input">${labels.surname}: </label>
                         <input class="input-field" type="text" name="nameLast" value="${user.nameLast}" required />
-                        <c:if test = "${user.role eq 'LIBRARIAN'}">
-                            <label class="label-input">${labels.phone}: </label>
-                            <input class="input-field" type="text" name="numberPhone" value="${user.numberPhone}" required />
-                        </c:if><br/>
+                        <br/>
                         <div id="error">
                             ${labels[profileUpdateMessage]}
                         </div><br/>

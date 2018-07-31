@@ -7,9 +7,10 @@ import java.util.Calendar;
 import org.junit.Test;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 import com.epam.mylibrary.entity.User;
-import com.epam.mylibrary.entity.Reader;
+import com.epam.mylibrary.entity.UserRole;
 import com.epam.mylibrary.db.ConnectionPool;
 import com.epam.mylibrary.dao.exception.DaoException;
 
@@ -20,20 +21,19 @@ public class UserDaoTest {
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        user = new Reader();
+        user = new User();
         user.setEmail("someEmail");
         user.setPassword("somePassword");
+        user.setRole(UserRole.READER);
         user.setNameFirst("someName");
         user.setNameLast("someSurname");
-        user.setRole(User.Role.READER);
         Date currentDate = new Date(Calendar.getInstance().getTimeInMillis());
-        ((Reader) user).setDateRegistered(currentDate);
+        user.setDateRegistered(currentDate);
         ConnectionPool pool = ConnectionPool.getInstance();
         Connection connection = pool.takeConnection();
         dao = new UserDao(connection);
         int id = dao.create(user);
         user.setId(id);
-        dao.createReader((Reader) user);
     }
 
     @AfterClass
@@ -50,16 +50,22 @@ public class UserDaoTest {
     @Test
     public void testFindById() throws Exception {
         User foundUser = dao.findById(user.getId());
-        assertNotNull(foundUser);
-        assertEquals(user, foundUser);
+        assertThat(foundUser, is(notNullValue()));
+        assertThat(foundUser, is(user));
+    }
+
+    @Test
+    public void testFindByIdGivenZero() throws Exception {
+        int idZero = 0;
+        User foundUser = dao.findById(idZero);
+        assertThat(foundUser, is(nullValue()));
     }
 
     @Test
     public void testFindByIdGivenInvalidNumber() throws Exception {
-        int idZero = 0;
         int idNegative = -1;
-        assertNull(dao.findById(idZero));
-        assertNull(dao.findById(idNegative));
+        User foundUser = dao.findById(idNegative);
+        assertThat(foundUser, is(nullValue()));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -70,33 +76,30 @@ public class UserDaoTest {
 
     @Test
     public void testCreate() throws Exception {
-        User newUser = new Reader();
+        User newUser = new User();
         newUser.setEmail("userEmail");
         newUser.setPassword("userPassword");
+        newUser.setRole(UserRole.READER);
         newUser.setNameFirst("userName");
         newUser.setNameLast("userSurname");
-        newUser.setRole(User.Role.READER);
         Date newDate = new Date(Calendar.getInstance().getTimeInMillis());
-        ((Reader) newUser).setDateRegistered(newDate);
+        newUser.setDateRegistered(newDate);
         int id = dao.create(newUser);
+        assertThat(id, is(not(0)));
         User foundUser = dao.findById(id);
-        assertNull(foundUser);
-        newUser.setId(id);
-        dao.createReader((Reader) newUser);
-        foundUser = dao.findById(id);
-        assertNotNull(foundUser);
-        assertEquals(newUser, foundUser);
+        assertThat(foundUser, is(notNullValue()));
+        assertThat(foundUser, is(newUser));
     }
 
     @Test
     public void update() throws Exception {
         User foundUser = dao.findById(user.getId());
-        assertEquals(user, foundUser);
+        assertThat(foundUser, is(user));
         foundUser.setNameFirst("newName");
         foundUser.setNameLast("newSurname");
         dao.update(foundUser);
         foundUser = dao.findById(user.getId());
-        assertNotEquals(user, foundUser);
+        assertThat(foundUser, is(not(user)));
         user = foundUser;
     }
 
@@ -107,50 +110,31 @@ public class UserDaoTest {
 
     @Test
     public void testIsRegistered() throws Exception {
-        assertTrue(dao.isRegistered(user.getEmail()));
+        String email = user.getEmail();
+        assertThat(dao.isRegistered(email), is(true));
     }
 
     @Test
-    public void testIsRegisteredGivenInvalidString() throws Exception {
-        assertFalse(dao.isRegistered(user.getPassword()));
-        assertFalse(dao.isRegistered(new User().getEmail()));
+    public void testIsRegisteredGivenEmptyString() throws Exception {
+        String email = new User().getEmail();
+        assertThat(dao.isRegistered(email), is(false));
     }
 
     @Test
     public void findByEmailAndPassword() throws Exception {
         User foundUser = dao.findByEmailAndPassword(user.getEmail(), user.getPassword());
-        assertNotNull(foundUser);
-        assertEquals(user, foundUser);
+        assertThat(foundUser, is(notNullValue()));
+        assertThat(foundUser, is(user));
     }
 
     @Test
     public void testChangePassword() throws Exception {
         User foundUser = dao.findById(user.getId());
-        assertEquals(user, foundUser);
+        assertThat(foundUser, is(user));
         foundUser.setPassword("newPassword");
         dao.changePassword(foundUser);
         foundUser = dao.findById(user.getId());
-        assertNotEquals(user, foundUser);
+        assertThat(foundUser, is(not(user)));
         user = foundUser;
-    }
-
-    @Test
-    public void testCreateReader() throws Exception {
-        User newUser = new Reader();
-        newUser.setEmail("readerEmail");
-        newUser.setPassword("readerPassword");
-        newUser.setNameFirst("readerName");
-        newUser.setNameLast("readerSurname");
-        newUser.setRole(User.Role.READER);
-        Date newDate = new Date(Calendar.getInstance().getTimeInMillis());
-        ((Reader) newUser).setDateRegistered(newDate);
-        int id = dao.create(newUser);
-        User foundUser = dao.findById(id);
-        assertNull(foundUser);
-        newUser.setId(id);
-        dao.createReader((Reader) newUser);
-        foundUser = dao.findById(id);
-        assertNotNull(foundUser);
-        assertEquals(newUser, foundUser);
     }
 }

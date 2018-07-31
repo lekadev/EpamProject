@@ -5,8 +5,5 @@
 <div id="info">
     <h3>${user.nameFirst} ${user.nameLast}</h3><hr/>
     ID#: ${user.id}<br/>
-    <c:if test="${user.role == 'LIBRARIAN'}">
-        ${labels.phone}: ${user.numberPhone}<br/>
-    </c:if>
     ${labels.email}: ${user.email}<br/>
 </div>

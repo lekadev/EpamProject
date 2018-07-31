@@ -7,7 +7,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import com.epam.mylibrary.entity.Book;
 import com.epam.mylibrary.entity.Author;
-import com.epam.mylibrary.db.DBColumns;
+import com.epam.mylibrary.constants.Const;
 import com.epam.mylibrary.db.ConnectionPool;
 import com.epam.mylibrary.dao.exception.DaoException;
 
@@ -31,17 +31,12 @@ public class AuthorDao extends EntityDao<Integer, Author> {
         this.connection = connection;
     }
 
-
     @Override
     public List<Author> findAll() throws DaoException {
         List<Author> authors = new ArrayList<>();
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = pool.takeConnection();
-            statement = connection.prepareStatement(SELECT_ALL);
-            resultSet = statement.executeQuery();
+        try(Connection connection = pool.takeConnection();
+                PreparedStatement statement = connection.prepareStatement(SELECT_ALL);
+                    ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 Author author = retrieveAuthor(resultSet);
                 authors.add(author);
@@ -49,8 +44,6 @@ public class AuthorDao extends EntityDao<Integer, Author> {
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to get list of all authors", e);
             throw new DaoException();
-        } finally {
-            pool.closeConnection(connection, statement, resultSet);
         }
         return authors;
     }
@@ -58,22 +51,17 @@ public class AuthorDao extends EntityDao<Integer, Author> {
     @Override
     public Author findById(Integer idAuthor) throws DaoException {
         Author author = null;
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            connection = pool.takeConnection();
-            statement = connection.prepareStatement(SELECT_BY_ID);
+        try(Connection connection = pool.takeConnection();
+                PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
             statement.setInt(1, idAuthor);
-            resultSet = statement.executeQuery();
+            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 author = retrieveAuthor(resultSet);
             }
+            resultSet.close();
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to select author by id", e);
             throw new DaoException();
-        } finally {
-            pool.closeConnection(connection, statement, resultSet);
         }
         return author;
     }
@@ -85,25 +73,20 @@ public class AuthorDao extends EntityDao<Integer, Author> {
 
     @Override
     public Integer create(Author author) throws DaoException {
-        Connection connection = null;
-        PreparedStatement statement = null;
-        ResultSet generatedKey = null;
         int idAuthor = 0;
-        try{
-            connection = pool.takeConnection();
-            statement = connection.prepareStatement(INSERT_NEW_AUTHOR, Statement.RETURN_GENERATED_KEYS);
+        try(Connection connection = pool.takeConnection();
+                PreparedStatement statement = connection.prepareStatement(INSERT_NEW_AUTHOR, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, author.getNameFirst());
             statement.setString(2, author.getNameLast());
             statement.executeUpdate();
-            generatedKey = statement.getGeneratedKeys();
+            ResultSet generatedKey = statement.getGeneratedKeys();
             if (generatedKey.next()) {
                 idAuthor = generatedKey.getInt(1);
             }
+            generatedKey.close();
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to create author", e);
             throw new DaoException();
-        } finally {
-            pool.closeConnection(connection, statement, generatedKey);
         }
         return idAuthor;
     }
@@ -115,16 +98,15 @@ public class AuthorDao extends EntityDao<Integer, Author> {
 
     public List<Author> findAuthorsOfBook(Book book) throws DaoException {
         List<Author> authors = new ArrayList<>();
-        PreparedStatement statement;
         ResultSet resultSet;
-        try {
-            statement = connection.prepareStatement(SELECT_AUTHORS_OF_BOOK);
+        try(PreparedStatement statement = connection.prepareStatement(SELECT_AUTHORS_OF_BOOK)) {
             statement.setInt(1, book.getId());
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Author author = retrieveAuthor(resultSet);
                 authors.add(author);
             }
+            resultSet.close();
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to get list of authors", e);
             throw new DaoException();
@@ -133,9 +115,7 @@ public class AuthorDao extends EntityDao<Integer, Author> {
     }
 
     public void insertAuthorsOfBook(Book book) throws DaoException {
-        PreparedStatement statement;
-        try {
-            statement = connection.prepareStatement(INSERT_AUTHOR_OF_BOOK);
+        try(PreparedStatement statement = connection.prepareStatement(INSERT_AUTHOR_OF_BOOK)) {
             for (Author author : book.getAuthors()) {
                 statement.setInt(1, book.getId());
                 statement.setInt(2, author.getId());
@@ -149,9 +129,7 @@ public class AuthorDao extends EntityDao<Integer, Author> {
     }
 
     public void deleteAuthorsOfBook(Book book) throws DaoException {
-        PreparedStatement statement;
-        try {
-            statement = connection.prepareStatement(DELETE_AUTHOR_OF_BOOK);
+        try(PreparedStatement statement = connection.prepareStatement(DELETE_AUTHOR_OF_BOOK)) {
             statement.setInt(1, book.getId());
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -163,9 +141,9 @@ public class AuthorDao extends EntityDao<Integer, Author> {
     private Author retrieveAuthor(ResultSet resultSet) throws DaoException {
         Author author = new Author();
         try{
-            author.setId(resultSet.getInt(DBColumns.AUTHOR_ID));
-            author.setNameFirst(resultSet.getString(DBColumns.AUTHOR_NAME_FIRST));
-            author.setNameLast(resultSet.getString(DBColumns.AUTHOR_NAME_LAST));
+            author.setId(resultSet.getInt(Const.AUTHOR_ID));
+            author.setNameFirst(resultSet.getString(Const.AUTHOR_NAME_FIRST));
+            author.setNameLast(resultSet.getString(Const.AUTHOR_NAME_LAST));
         } catch (SQLException e) {
             logger.log(Level.ERROR, "Unable to parse result set", e);
             throw new DaoException();

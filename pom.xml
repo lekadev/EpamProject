@@ -19,16 +19,6 @@
         <maven.compiler.target>1.7</maven.compiler.target>
     </properties>
 
-    <distributionManagement>
-        <repository>
-            <uniqueVersion>false</uniqueVersion>
-            <id>corp1</id>
-            <name>Corporate Repository</name>
-            <url>file:///D:/Documents/Java/IdeaProjects/MyLibrary</url>
-            <layout>default</layout>
-        </repository>
-    </distributionManagement>
-
     <dependencies>
         <dependency>
             <groupId>javax</groupId>
@@ -55,8 +45,22 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
-            <scope>compile</scope>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.hamcrest</groupId>
+                    <artifactId>hamcrest-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-all</artifactId>
+            <version>1.3</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>

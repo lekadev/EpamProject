@@ -6,10 +6,10 @@ import java.util.Properties;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import java.util.ResourceBundle;
+import com.epam.mylibrary.constants.Const;
 import java.util.concurrent.Executor;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ArrayBlockingQueue;
-
 
 public class ConnectionPool {
 
@@ -17,8 +17,7 @@ public class ConnectionPool {
     private static ConnectionPool poolInstance = null;
     private static volatile boolean isCreated = false;
 
-    private BlockingQueue<Connection> availableConnections;
-    private BlockingQueue<Connection> givenAwayConnections;
+    private BlockingQueue<Connection> connections;
 
     private String driverName;
     private String password;
@@ -31,33 +30,32 @@ public class ConnectionPool {
             synchronized (ConnectionPool.class) {
                 poolInstance = new ConnectionPool();
                 isCreated = true;
-                logger.log(Level.INFO, "Connection pool was initialized");
+                logger.log(Level.INFO, "Connection db was initialized");
             }
         }
         return poolInstance;
     }
 
     private ConnectionPool() {
-        ResourceBundle bundle = ResourceBundle.getBundle(DBConfig.DB_FILENAME);
-        this.poolSize = Integer.parseInt(bundle.getString(DBConfig.DB_POOL_SIZE));
-        this.driverName = bundle.getString(DBConfig.DB_DRIVER);
-        this.url = bundle.getString(DBConfig.DB_URL);
-        this.login = bundle.getString(DBConfig.DB_LOGIN);
-        this.password = bundle.getString(DBConfig.DB_PASSWORD);
+        ResourceBundle bundle = ResourceBundle.getBundle(Const.DB_FILENAME);
+        this.poolSize = Integer.parseInt(bundle.getString(Const.DB_POOL_SIZE));
+        this.driverName = bundle.getString(Const.DB_DRIVER);
+        this.url = bundle.getString(Const.DB_URL);
+        this.login = bundle.getString(Const.DB_LOGIN);
+        this.password = bundle.getString(Const.DB_PASSWORD);
         initPoolData();
     }
 
     private void initPoolData() {
-        availableConnections = new ArrayBlockingQueue<>(poolSize);
-        givenAwayConnections = new ArrayBlockingQueue<>(poolSize);
+        connections = new ArrayBlockingQueue<>(poolSize);
         for (int i = 0; i < poolSize; i++) {
             try {
                 Class.forName(driverName);
                 Connection connection = DriverManager.getConnection(url, login, password);
                 PooledConnection pooledConnection = new PooledConnection(connection);
-                availableConnections.add(pooledConnection);
+                connections.add(pooledConnection);
             } catch (SQLException | ClassNotFoundException e) {
-                logger.log(Level.ERROR, "Unable to initialize connection pool", e);
+                logger.log(Level.ERROR, "Unable to initialize connection db", e);
             }
         }
     }
@@ -65,75 +63,17 @@ public class ConnectionPool {
     public Connection takeConnection() throws SQLException {
         Connection connection;
         try {
-            connection = availableConnections.take();
-            givenAwayConnections.offer(connection);
+            connection = connections.take();
         } catch (InterruptedException e) {
             logger.log(Level.ERROR, "Unable to allocate connection", e);
             throw new SQLException();
         }
-
         return connection;
     }
 
-    public void closeConnection(Connection con, PreparedStatement pst, ResultSet rs) {
-        try {
-            if (con != null) {
-                con.close();
-            }
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Unable to return connection to the pool", e);
-        }
-        try {
-            if (pst != null) {
-                pst.close();
-            }
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Unable to close statement", e);
-        }
-        try {
-            if (rs != null) {
-                rs.close();
-            }
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Unable to close result set", e);
-        }
-    }
-
-    public void closeConnection(Connection con, PreparedStatement pst) {
-        try {
-            if (con != null) {
-                con.close();
-            }
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Unable to return connection to the pool", e);
-        }
-        try {
-            if (pst != null) {
-                pst.close();
-            }
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Unable to close statement", e);
-        }
-    }
-
-    public void closeConnection(Connection con) {
-        try {
-            if (con != null) {
-                con.close();
-            }
-        } catch (SQLException e) {
-            logger.log(Level.ERROR, "Unable to return connection to the pool", e);
-        }
-    }
-
     public void dispose() {
-        disposeConnectionsQueue(availableConnections);
-        disposeConnectionsQueue(givenAwayConnections);
-    }
-
-    private void disposeConnectionsQueue(BlockingQueue<Connection> queue) {
         Connection connection;
-        while ((connection = queue.poll()) != null) {
+        while ((connection = connections.poll()) != null) {
             try {
                 connection.commit();
                 ((PooledConnection) connection).reallyClose();
@@ -141,6 +81,7 @@ public class ConnectionPool {
                 logger.log(Level.ERROR, "Unable to close connection", e);
             }
         }
+        logger.log(Level.DEBUG, "Disposing connection pool... ");
     }
 
     private class PooledConnection implements Connection {
@@ -164,10 +105,7 @@ public class ConnectionPool {
             if (connection.isReadOnly()) {
                 connection.setReadOnly(false);
             }
-            if (!givenAwayConnections.remove(this)) {
-                throw new SQLException("Unable to remove connection from the queue of given away connections.");
-            }
-            if (!availableConnections.offer(this)) {
+            if (!connections.offer(this)) {
                 throw new SQLException("Unable to return used connection to the queue of available connections");
             }
         }

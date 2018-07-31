@@ -45,14 +45,19 @@ public class OrderService {
             try {
                 if (connection != null) {
                     connection.rollback();
-                    logger.log(Level.ERROR, "Transaction rollback");
                 }
             } catch (SQLException e2) {
                 logger.log(Level.ERROR, "Unable to rollback transaction", e2);
             }
             throw new ServiceException();
         } finally {
-            pool.closeConnection(connection);
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.ERROR, "Unable to close connection", e);
+            }
         }
         return orders;
     }
@@ -83,14 +88,19 @@ public class OrderService {
             try {
                 if (connection != null) {
                     connection.rollback();
-                    logger.log(Level.ERROR, "Transaction rollback");
                 }
             } catch (SQLException e2) {
                 logger.log(Level.ERROR, "Unable to rollback transaction", e2);
             }
             throw new ServiceException();
         } finally {
-            pool.closeConnection(connection);
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                logger.log(Level.ERROR, "Unable to close connection", e);
+            }
         }
         return orders;
     }

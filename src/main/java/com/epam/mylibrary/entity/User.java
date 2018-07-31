@@ -1,24 +1,27 @@
 package com.epam.mylibrary.entity;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class User extends Entity {
 
     private String email;
     private String password;
+    private UserRole role;
     private String nameFirst;
     private String nameLast;
-    private Role role;
+    private Date dateRegistered;
 
     public User() {}
 
-    public User(int id, String email, String password, String nameFirst, String nameLast, Role role) {
+    public User(int id, String email, String password, UserRole role, String nameFirst, String nameLast, Date date) {
         super(id);
         this.email = email;
         this.password = password;
+        this.role = role;
         this.nameFirst = nameFirst;
         this.nameLast = nameLast;
-        this.role = role;
+        this.dateRegistered = date;
     }
 
     public String getEmail() {
@@ -37,6 +40,14 @@ public class User extends Entity {
         this.password = password;
     }
 
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
+    }
+
     public String getNameFirst() {
         return nameFirst;
     }
@@ -53,16 +64,12 @@ public class User extends Entity {
         this.nameLast = nameLast;
     }
 
-    public Role getRole() {
-        return role;
+    public Date getDateRegistered() {
+        return dateRegistered;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public enum Role {
-        LIBRARIAN, READER, GUEST
+    public void setDateRegistered(Date dateRegistered) {
+        this.dateRegistered = dateRegistered;
     }
 
     @Override
@@ -72,22 +79,23 @@ public class User extends Entity {
         User user = (User) o;
         return Objects.equals(email, user.email) &&
                 Objects.equals(password, user.password) &&
+                role == user.role &&
                 Objects.equals(nameFirst, user.nameFirst) &&
                 Objects.equals(nameLast, user.nameLast) &&
-                role == user.role;
+                Objects.equals(dateRegistered, user.dateRegistered);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(email, password, nameFirst, nameLast, role);
+        return Objects.hash(email, password, role, nameFirst, nameLast, dateRegistered);
     }
 
     @Override
     public String toString() {
         return "User ID#: " + super.getId() +
+                "\nRole: " + role +
                 "\nEmail: " + email +
                 "\nName: " + nameFirst + " " + nameLast +
-                "\nRole: " + role;
+                "\nRegistered on: " + dateRegistered;
     }
 }

@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <my:template>
-    <jsp:attribute name="title"><title>Registrations form</title></jsp:attribute>
+    <jsp:attribute name="title"><title>${labels.register}</title></jsp:attribute>
     <jsp:body>
         <div id="wrap-new-user-form">
             <form id="new-user-form" method="POST" action="${pageContext.request.contextPath}/controller/register">

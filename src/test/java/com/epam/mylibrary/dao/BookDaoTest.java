@@ -6,7 +6,8 @@ import java.sql.Connection;
 import org.junit.Test;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 import com.epam.mylibrary.entity.Book;
 import com.epam.mylibrary.db.ConnectionPool;
 import com.epam.mylibrary.dao.exception.DaoException;
@@ -16,7 +17,6 @@ public class BookDaoTest {
     private static Book book;
     private static BookDao dao;
     private static Random random;
-
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -41,23 +41,30 @@ public class BookDaoTest {
     @Test
     public void testFindAll() throws Exception {
         List<Book> books = dao.findAll();
-        assertTrue(books.size() >= 1);
-        assertTrue(books.contains(book));
+        assertThat(books, is(notNullValue()));
+        assertThat(books.size(), greaterThanOrEqualTo(1));
+        assertThat(books, hasItem(book));
     }
 
     @Test
     public void testFindById() throws Exception {
         Book foundBook = dao.findById(book.getId());
-        assertNotNull(foundBook);
-        assertEquals(book, foundBook);
+        assertThat(foundBook, is(notNullValue()));
+        assertThat(foundBook, is(book));
     }
 
     @Test
-    public void testFindByIdGivenInvalidNumber() throws Exception {
+    public void testFindByIdGivenZero() throws Exception {
         int idZero = 0;
+        Book foundBook = dao.findById(idZero);
+        assertThat(foundBook, is(nullValue()));
+    }
+
+    @Test
+    public void testFindByIdNegativeNumber() throws Exception {
         int idNegative = -1;
-        assertNull(dao.findById(idZero));
-        assertNull(dao.findById(idNegative));
+        Book foundBook = dao.findById(idNegative);
+        assertThat(foundBook, is(nullValue()));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -73,10 +80,10 @@ public class BookDaoTest {
         newBook.setPublisher("bookPublisher");
         newBook.setNumberCopies(random.nextInt());
         int id = dao.create(newBook);
-        assertTrue(id != 0);
+        assertThat(id, is(not(0)));
         Book foundBook = dao.findById(id);
-        assertNotNull(foundBook);
-        assertEquals(newBook, foundBook);
+        assertThat(foundBook, is(notNullValue()));
+        assertThat(foundBook, is(newBook));
     }
 
     @Test(expected = DaoException.class)
@@ -87,12 +94,13 @@ public class BookDaoTest {
     @Test
     public void testUpdate() throws Exception {
         Book foundBook = dao.findById(book.getId());
-        assertEquals(book, foundBook);
+        assertThat(foundBook, is(book));
         foundBook.setTitle("newTitle");
         foundBook.setPublisher("newPublisher");
         foundBook.setNumberCopies(random.nextInt());
         dao.update(foundBook);
         foundBook = dao.findById(book.getId());
-        assertNotEquals(book, foundBook);
+        assertThat(foundBook, is(not(book)));
+        book = foundBook;
     }
 }

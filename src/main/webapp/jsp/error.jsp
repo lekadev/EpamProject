@@ -3,7 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <my:template>
-    <jsp:attribute name="title"><title>Error</title></jsp:attribute>
+    <jsp:attribute name="title"><title>${labels.error}</title></jsp:attribute>
     <jsp:body>
         <br/>
         <div id="pageNotFound"><strong>${labels.pageNotFound} &nbsp;</strong>

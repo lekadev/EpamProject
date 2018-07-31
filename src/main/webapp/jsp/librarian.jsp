@@ -39,7 +39,7 @@
                         </td>
                         <td class="nolinebreak">${labels.status}: <my:order-status orderStatus="${order.status}"/>
                             <c:if test = "${order.status ne 'RETURNED' and order.status ne 'DENIED'}">
-                                <form id="change-status-form" method="POST" action="change-status">
+                                <form id="change-status-form" method="POST" action="${pageContext.request.contextPath}/controller/change-status">
                                     <input type="hidden" name="idOrder" value="${order.id}"/>
                                     <select name="status" id="choose-status" data-width = "fit">
                                         <option selected disabled>- ${labels.changeStatus}</option>

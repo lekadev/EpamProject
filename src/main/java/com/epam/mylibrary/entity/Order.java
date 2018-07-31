@@ -65,7 +65,6 @@ public class Order extends Entity {
 
     @Override
     public int hashCode() {
-
         return Objects.hash(user, book, status, date);
     }
 
