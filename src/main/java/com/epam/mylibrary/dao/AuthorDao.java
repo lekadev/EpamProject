@@ -17,7 +17,7 @@ public class AuthorDao extends EntityDao<Integer, Author> {
 
     private final static String SELECT_ALL = "SELECT id_author, name_first, name_last FROM library.author";
     private final static String SELECT_BY_ID = "SELECT id_author, name_first, name_last FROM library.author WHERE id_author=?";
-    private final static String SELECT_AUTHORS_OF_BOOK = "SELECT id_author, name_first, name_last FROM library.author JOIN library.book2author USING(id_author) WHERE id_book=?";
+    private final static String SELECT_AUTHORS_OF_BOOK = "SELECT id_author, name_first, name_last, id_book FROM library.author JOIN library.book2author USING(id_author) WHERE id_book=?";
     private final static String INSERT_NEW_AUTHOR = "INSERT INTO library.author(name_first, name_last) VALUES(?, ?)";
     private final static String INSERT_AUTHOR_OF_BOOK = "INSERT INTO library.book2author(id_book, id_author) VALUES(?, ?)";
     private final static String DELETE_AUTHOR_OF_BOOK = "DELETE FROM library.book2author WHERE id_book=?";
