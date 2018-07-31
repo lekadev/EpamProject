@@ -35,7 +35,7 @@ public class ChangePasswordAction implements Action {
             throw new ActionException();
         }
         logger.log(Level.INFO, "Password was changed for: " + user.toString());
-        req.getSession().setAttribute(Const.PASSWORD_UPDATE_MESSAGE, Const.PASSWORD_UPDATE_SUCCESS);
+        req.getSession().setAttribute(Const.PASSWORD_FORM_MESSAGE, Const.PASSWORD_UPDATE_SUCCESS);
         req.getSession().removeAttribute(Const.USER);
         return Const.REDIRECT_START_PAGE;
     }

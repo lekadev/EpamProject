@@ -22,9 +22,7 @@ public class ChangeBookInfoAction implements Action {
         if (!isBookFormValid(req)) {
             return Const.REDIRECT_BOOK_EDIT_FORM;
         }
-        String title = req.getParameter(Const.PARAM_TITLE);
-        String publisher = req.getParameter(Const.PARAM_PUBLISHER);
-        String numberCopies = req.getParameter(Const.PARAM_COPIES);
+        Book book = setBook(req);
         String[] idAuthors = req.getParameterValues(Const.PARAM_AUTHORS);
         List<Author> authors = new ArrayList<>();
         for (String idAuthor : idAuthors) {
@@ -36,11 +34,7 @@ public class ChangeBookInfoAction implements Action {
             }
             authors.add(author);
         }
-        Book book = (Book) req.getSession().getAttribute(Const.BOOK);
         book.setAuthors(authors);
-        book.setTitle(title);
-        book.setPublisher(publisher);
-        book.setNumberCopies(Integer.parseInt(numberCopies));
         BookService bookService = new BookService();
         try {
             bookService.updateBook(book);
@@ -50,5 +44,16 @@ public class ChangeBookInfoAction implements Action {
         req.getSession().setAttribute(Const.BOOK_FORM_MESSAGE, Const.UPDATE_SUCCESS);
         req.getSession().setAttribute(Const.BOOK, book);
         return Const.REDIRECT_BOOK_EDIT_FORM;
+    }
+
+    private Book setBook(HttpServletRequest req) {
+        String title = req.getParameter(Const.PARAM_TITLE);
+        String publisher = req.getParameter(Const.PARAM_PUBLISHER);
+        String numberCopies = req.getParameter(Const.PARAM_COPIES);
+        Book book = (Book) req.getSession().getAttribute(Const.BOOK);
+        book.setTitle(title);
+        book.setPublisher(publisher);
+        book.setNumberCopies(Integer.parseInt(numberCopies));
+        return book;
     }
 }

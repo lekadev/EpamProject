@@ -37,10 +37,10 @@ public class Const {
 
 
     // REQUEST ATTRIBUTES
-    public static final String AUTHOR_ADD_MESSAGE = "authorAddMessage";
+    public static final String AUTHOR_FORM_MESSAGE = "authorFormMessage";
     public static final String BOOK_FORM_MESSAGE = "bookFormMessage";
-    public static final String PROFILE_UPDATE_MESSAGE = "profileUpdateMessage";
-    public static final String PASSWORD_UPDATE_MESSAGE = "passwordUpdateMessage";
+    public static final String PROFILE_FORM_MESSAGE = "profileFormMessage";
+    public static final String PASSWORD_FORM_MESSAGE = "passwordFormMessage";
     public static final String LOGIN_MESSAGE = "loginMessage";
     public static final String REGISTRATION_MESSAGE = "registrationMessage";
 

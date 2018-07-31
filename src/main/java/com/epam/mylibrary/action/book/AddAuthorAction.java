@@ -32,7 +32,7 @@ public class AddAuthorAction implements Action {
         } catch (DaoException e) {
             throw new ActionException();
         }
-        req.getSession().setAttribute(Const.AUTHOR_ADD_MESSAGE, Const.AUTHOR_ADD_SUCCESS);
+        req.getSession().setAttribute(Const.AUTHOR_FORM_MESSAGE, Const.AUTHOR_ADD_SUCCESS);
         logger.log(Level.INFO, "New author was added: " + author.toString());
         return Const.REDIRECT_AUTHOR_FORM;
     }

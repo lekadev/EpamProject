@@ -16,9 +16,9 @@
                         <label class="label-input">${labels.repeatPassword}: </label>
                         <input class="input-field" type="password" name="passwordRepeated" value="${password}" required /><br/>
                         <div id="error">
-                            ${labels[passwordUpdateMessage]}
+                            ${labels[passwordFormMessage]}
                         </div>
-                        <c:remove var="passwordUpdateMessage"/>
+                        <c:remove var="passwordFormMessage"/>
                         <div class="left-btn">
                             <button>${labels.changePass}</button>
                         </div>
@@ -30,9 +30,9 @@
                         <input class="input-field" type="text" name="nameLast" value="${user.nameLast}" required />
                         <br/>
                         <div id="error">
-                            ${labels[profileUpdateMessage]}
+                            ${labels[profileFormMessage]}
                         </div><br/>
-                        <c:remove var="profileUpdateMessage"/>
+                        <c:remove var="profileFormMessage"/>
                         <div class="left-btn">
                             <button>${labels.confirm}</button>
                         </div>

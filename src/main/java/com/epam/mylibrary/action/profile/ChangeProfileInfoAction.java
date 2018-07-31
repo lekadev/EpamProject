@@ -33,7 +33,7 @@ public class ChangeProfileInfoAction implements Action {
         } catch (DaoException e) {
             throw new ActionException();
         }
-        req.getSession().setAttribute(Const.PROFILE_UPDATE_MESSAGE, Const.UPDATE_SUCCESS);
+        req.getSession().setAttribute(Const.PROFILE_FORM_MESSAGE, Const.UPDATE_SUCCESS);
         return Const.REDIRECT_PROFILE_EDIT_FORM;
     }
 }

@@ -15,9 +15,9 @@
                         <label class="label-input">${labels.surname}: </label>
                         <input class="input-field" type="text" name="nameLast"/><br/>
                         <div id="error">
-                            ${labels[authorAddMessage]}
+                            ${labels[authorFormMessage]}
                         </div><br/>
-                        <c:remove var="authorAddMessage"/>
+                        <c:remove var="authorFormMessage"/>
                         <div class="left-btn">
                             <button>${labels.add}</button>
                         </div>
