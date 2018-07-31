@@ -81,8 +81,7 @@ public class User extends Entity {
                 Objects.equals(password, user.password) &&
                 role == user.role &&
                 Objects.equals(nameFirst, user.nameFirst) &&
-                Objects.equals(nameLast, user.nameLast) &&
-                Objects.equals(dateRegistered, user.dateRegistered);
+                Objects.equals(nameLast, user.nameLast);
     }
 
     @Override

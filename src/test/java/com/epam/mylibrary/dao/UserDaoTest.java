@@ -91,6 +91,11 @@ public class UserDaoTest {
         assertThat(foundUser, is(newUser));
     }
 
+    @Test(expected = DaoException.class)
+    public void testCreateGivenEmptyObject() throws Exception {
+        dao.create(new User());
+    }
+
     @Test
     public void update() throws Exception {
         User foundUser = dao.findById(user.getId());
@@ -101,11 +106,6 @@ public class UserDaoTest {
         foundUser = dao.findById(user.getId());
         assertThat(foundUser, is(not(user)));
         user = foundUser;
-    }
-
-    @Test(expected = DaoException.class)
-    public void testCreateGivenEmptyObject() throws Exception {
-        dao.create(new User());
     }
 
     @Test
