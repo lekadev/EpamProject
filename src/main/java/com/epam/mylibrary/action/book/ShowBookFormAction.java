@@ -16,7 +16,7 @@ public class ShowBookFormAction implements Action {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionException {
         String resultPage = null;
-        if(req.getSession().getAttribute(Const.BOOK) != null) {
+        if (req.getSession().getAttribute(Const.BOOK) != null) {
             List<Author> allAuthors;
             try {
                 allAuthors = new AuthorDao().findAll();

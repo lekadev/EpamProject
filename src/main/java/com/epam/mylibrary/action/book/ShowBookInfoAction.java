@@ -27,7 +27,7 @@ public class ShowBookInfoAction implements Action {
             }
             req.getSession().setAttribute(Const.BOOK, book);
             resultPage = Const.FORWARD_BOOK_INFO;
-        } else if(req.getSession().getAttribute(Const.BOOK) != null) {
+        } else if (req.getSession().getAttribute(Const.BOOK) != null) {
             resultPage = Const.FORWARD_BOOK_INFO;
         }
         return resultPage;

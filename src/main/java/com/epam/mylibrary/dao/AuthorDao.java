@@ -22,8 +22,8 @@ public class AuthorDao extends EntityDao<Integer, Author> {
     private final static String INSERT_AUTHOR_OF_BOOK = "INSERT INTO library.book2author(id_book, id_author) VALUES(?, ?)";
     private final static String DELETE_AUTHOR_OF_BOOK = "DELETE FROM library.book2author WHERE id_book=?";
 
-    private ConnectionPool pool = ConnectionPool.getInstance();
     private Connection connection;
+    private ConnectionPool pool = ConnectionPool.getInstance();
 
     public AuthorDao() { }
 
@@ -34,7 +34,7 @@ public class AuthorDao extends EntityDao<Integer, Author> {
     @Override
     public List<Author> findAll() throws DaoException {
         List<Author> authors = new ArrayList<>();
-        try(Connection connection = pool.takeConnection();
+        try (Connection connection = pool.takeConnection();
                 PreparedStatement statement = connection.prepareStatement(SELECT_ALL);
                     ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
@@ -51,7 +51,7 @@ public class AuthorDao extends EntityDao<Integer, Author> {
     @Override
     public Author findById(Integer idAuthor) throws DaoException {
         Author author = null;
-        try(Connection connection = pool.takeConnection();
+        try (Connection connection = pool.takeConnection();
                 PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
             statement.setInt(1, idAuthor);
             ResultSet resultSet = statement.executeQuery();
@@ -74,7 +74,7 @@ public class AuthorDao extends EntityDao<Integer, Author> {
     @Override
     public Integer create(Author author) throws DaoException {
         int idAuthor = 0;
-        try(Connection connection = pool.takeConnection();
+        try (Connection connection = pool.takeConnection();
                 PreparedStatement statement = connection.prepareStatement(INSERT_NEW_AUTHOR, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, author.getNameFirst());
             statement.setString(2, author.getNameLast());
@@ -99,7 +99,7 @@ public class AuthorDao extends EntityDao<Integer, Author> {
     public List<Author> findAuthorsOfBook(Book book) throws DaoException {
         List<Author> authors = new ArrayList<>();
         ResultSet resultSet;
-        try(PreparedStatement statement = connection.prepareStatement(SELECT_AUTHORS_OF_BOOK)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_AUTHORS_OF_BOOK)) {
             statement.setInt(1, book.getId());
             resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -115,7 +115,7 @@ public class AuthorDao extends EntityDao<Integer, Author> {
     }
 
     public void insertAuthorsOfBook(Book book) throws DaoException {
-        try(PreparedStatement statement = connection.prepareStatement(INSERT_AUTHOR_OF_BOOK)) {
+        try (PreparedStatement statement = connection.prepareStatement(INSERT_AUTHOR_OF_BOOK)) {
             for (Author author : book.getAuthors()) {
                 statement.setInt(1, book.getId());
                 statement.setInt(2, author.getId());
@@ -129,7 +129,7 @@ public class AuthorDao extends EntityDao<Integer, Author> {
     }
 
     public void deleteAuthorsOfBook(Book book) throws DaoException {
-        try(PreparedStatement statement = connection.prepareStatement(DELETE_AUTHOR_OF_BOOK)) {
+        try (PreparedStatement statement = connection.prepareStatement(DELETE_AUTHOR_OF_BOOK)) {
             statement.setInt(1, book.getId());
             statement.executeUpdate();
         } catch (SQLException e) {

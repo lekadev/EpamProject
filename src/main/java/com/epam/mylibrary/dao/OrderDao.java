@@ -14,14 +14,14 @@ public class OrderDao extends EntityDao<Integer, Order> {
 
     private final static Logger logger = Logger.getLogger(OrderDao.class);
 
-    private final static String SELECT_ALL = "SELECT * FROM library.order ORDER BY date DESC";
-    private final static String SELECT_BY_USER_ID = "SELECT * FROM library.order WHERE id_user=? ORDER BY date DESC";
+    private final static String SELECT_ALL = "SELECT id_order, id_book, id_user, status, date FROM library.order ORDER BY date DESC";
+    private final static String SELECT_BY_USER_ID = "SELECT id_order, id_book, id_user, status, date FROM library.order WHERE id_user=? ORDER BY date DESC";
     private final static String UPDATE_STATUS_BY_ORDER_ID = "UPDATE library.order SET status=? WHERE id_order=?";
     private final static String DELETE_BY_ORDER_ID = "DELETE FROM library.order WHERE id_order=?";
     private final static String INSERT = "INSERT INTO library.order (id_book, id_user, status) VALUES(?, ?, ?)";
 
-    private ConnectionPool pool = ConnectionPool.getInstance();
     private Connection connection;
+    private ConnectionPool pool = ConnectionPool.getInstance();
 
     public OrderDao() { }
 
@@ -32,7 +32,7 @@ public class OrderDao extends EntityDao<Integer, Order> {
     @Override
     public List<Order> findAll() throws DaoException {
         List<Order> orders = new ArrayList<>();
-        try(PreparedStatement statement = connection.prepareStatement(SELECT_ALL);
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL);
                 ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 Order order = retrieveOrder(resultSet);
@@ -52,7 +52,7 @@ public class OrderDao extends EntityDao<Integer, Order> {
 
     @Override
     public void deleteById(Integer idOrder) throws DaoException {
-        try(Connection connection = pool.takeConnection();
+        try (Connection connection = pool.takeConnection();
                 PreparedStatement statement = connection.prepareStatement(DELETE_BY_ORDER_ID)) {
             statement.setInt(1, idOrder);
             statement.executeUpdate();
@@ -65,7 +65,7 @@ public class OrderDao extends EntityDao<Integer, Order> {
     @Override
     public Integer create(Order order) throws DaoException {
         int idOrder = 0;
-        try(Connection connection = pool.takeConnection();
+        try (Connection connection = pool.takeConnection();
                 PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, order.getBook().getId());
             statement.setInt(2, order.getUser().getId());
@@ -90,7 +90,7 @@ public class OrderDao extends EntityDao<Integer, Order> {
 
     public List<Order> findOrdersOfUser(User user) throws DaoException {
         List<Order> orders = new ArrayList<>();
-        try(PreparedStatement statement = connection.prepareStatement(SELECT_BY_USER_ID)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_USER_ID)) {
             statement.setInt(1, user.getId());
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -107,7 +107,7 @@ public class OrderDao extends EntityDao<Integer, Order> {
     }
 
     public void changeStatus(int idOrder, Order.OrderStatus status) throws DaoException {
-        try(Connection connection = pool.takeConnection();
+        try (Connection connection = pool.takeConnection();
                 PreparedStatement statement = connection.prepareStatement(UPDATE_STATUS_BY_ORDER_ID)) {
             statement.setString(1, String.valueOf(status));
             statement.setInt(2, idOrder);

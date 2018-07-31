@@ -21,7 +21,7 @@ public class RegisterReaderAction implements Action {
 
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionException {
-        if(!isNewUserFormValid(req)) {
+        if (!isNewUserFormValid(req)) {
             return Const.REDIRECT_READER_FORM;
         }
         String email = req.getParameter(Const.PARAM_EMAIL);

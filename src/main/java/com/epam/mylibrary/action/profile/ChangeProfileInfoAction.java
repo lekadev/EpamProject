@@ -17,12 +17,12 @@ public class ChangeProfileInfoAction implements Action {
         String nameFirstNew = req.getParameter(Const.PARAM_NAME);
         String nameLastNew = req.getParameter(Const.PARAM_SURNAME);
         User user = (User) req.getSession().getAttribute(Const.USER);
-        if(!isEditProfileFormValid(req)) {
+        if (!isEditProfileFormValid(req)) {
             return Const.REDIRECT_PROFILE_EDIT_FORM;
         }
         boolean isUpdated = !user.getNameFirst().equals(nameFirstNew)
                 || !user.getNameLast().equals(nameLastNew);
-        if(!isUpdated) {
+        if (!isUpdated) {
             return Const.REDIRECT_PROFILE_EDIT_FORM;
         }
         user.setNameFirst(nameFirstNew);

@@ -33,7 +33,7 @@ public class LibrarySystemController extends HttpServlet {
         } catch (ActionException e) {
             throw new ServletException();
         }
-        if(req.getMethod().equals(METHOD_POST)) {
+        if (req.getMethod().equals(METHOD_POST)) {
             resp.sendRedirect(resultPage);
         } else if (req.getMethod().equals(METHOD_GET)){
             req.getRequestDispatcher("/jsp/" + resultPage + ".jsp").forward(req,resp);

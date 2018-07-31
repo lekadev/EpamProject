@@ -20,7 +20,7 @@ public class FormValidator {
         boolean isPasswordMatch = EqualValidator.isEqualValid(password, passwordRepeated);
         if (!isFieldsValid) {
             req.getSession().setAttribute(Const.REGISTRATION_MESSAGE, Const.TEXT_INPUT_ERROR);
-        } else if(!isPasswordValid) {
+        } else if (!isPasswordValid) {
             req.getSession().setAttribute(Const.REGISTRATION_MESSAGE, Const.PASSWORD_INVALID_ERROR);
         } else if (!isPasswordMatch) {
             req.getSession().setAttribute(Const.REGISTRATION_MESSAGE, Const.PASSWORD_MATCH_ERROR);
@@ -68,7 +68,7 @@ public class FormValidator {
                                     FieldValidator.isTextValid(publisher) &&
                                         FieldValidator.isIntegerValid(numberCopies);
         boolean isAuthorSelected = (idAuthors != null);
-        if(!isFieldsValid) {
+        if (!isFieldsValid) {
             req.getSession().setAttribute(Const.BOOK_FORM_MESSAGE, Const.TEXT_INPUT_ERROR);
         } else if (!isAuthorSelected) {
             req.getSession().setAttribute(Const.BOOK_FORM_MESSAGE, Const.NO_AUTHOR_ERROR);
@@ -83,7 +83,7 @@ public class FormValidator {
         String nameLast = req.getParameter(Const.PARAM_SURNAME);
         isFormValid = FieldValidator.isTextValid(nameFirst) &&
                                     FieldValidator.isTextValid(nameLast);
-        if(!isFormValid) {
+        if (!isFormValid) {
             req.getSession().setAttribute(Const.AUTHOR_ADD_MESSAGE, Const.TEXT_INPUT_ERROR);
         }
         return isFormValid;

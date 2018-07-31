@@ -14,13 +14,13 @@ public class OrderBookAction implements Action {
     @Override
     public String execute(HttpServletRequest req, HttpServletResponse resp) throws ActionException {
         String idBookString = req.getParameter(Const.PARAM_BOOK_ID);
-        if(idBookString == null) {
+        if (idBookString == null) {
             throw new ActionException();
         }
         int idOrderedBook = Integer.parseInt(idBookString);
         Book orderedBook = new Book();
         orderedBook.setId(idOrderedBook);
-        User user = (User)req.getSession().getAttribute(Const.USER);
+        User user = (User) req.getSession().getAttribute(Const.USER);
         Order order = new Order();
         order.setBook(orderedBook);
         order.setUser(user);

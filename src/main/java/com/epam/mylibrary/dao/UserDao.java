@@ -14,9 +14,9 @@ public class UserDao extends EntityDao<Integer, User> {
 
     private final static Logger logger = Logger.getLogger(UserDao.class);
 
-    private final static String SELECT_BY_ID = "SELECT * FROM library.user WHERE id_user=?";
-    private final static String SELECT_BY_EMAIL = "SELECT * FROM library.user WHERE email=?";
-    private final static String SELECT_BY_EMAIL_AND_PASSWORD = "SELECT * FROM library.user WHERE email=? AND password=?";
+    private final static String SELECT_BY_ID = "SELECT id_user, email, password, role, name_first, name_last, date_registered FROM library.user WHERE id_user=?";
+    private final static String SELECT_BY_EMAIL = "SELECT id_user, email, password, role, name_first, name_last, date_registered FROM library.user WHERE email=?";
+    private final static String SELECT_BY_EMAIL_AND_PASSWORD = "SELECT id_user, email, password, role, name_first, name_last, date_registered FROM library.user WHERE email=? AND password=?";
     private final static String UPDATE_USER = "UPDATE library.user SET name_first=?, name_last=? WHERE id_user=?";
     private final static String UPDATE_PASSWORD = "UPDATE library.user SET password=? WHERE id_user=?";
     private final static String INSERT_USER = "INSERT INTO library.user (email, password, role, name_first, name_last, date_registered) VALUES (?, ?, ?, ?, ?, ?)";
@@ -38,7 +38,7 @@ public class UserDao extends EntityDao<Integer, User> {
     @Override
     public User findById(Integer id) throws DaoException {
         User user = null;
-        try(PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
             statement.setInt(1, id);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -60,7 +60,7 @@ public class UserDao extends EntityDao<Integer, User> {
     @Override
     public Integer create(User user) throws DaoException {
         int idUser = 0;
-        try(Connection connection = pool.takeConnection();
+        try (Connection connection = pool.takeConnection();
                 PreparedStatement statement = connection.prepareStatement(INSERT_USER, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, user.getEmail());
             statement.setString(2, user.getPassword());
@@ -83,7 +83,7 @@ public class UserDao extends EntityDao<Integer, User> {
 
     @Override
     public void update(User user) throws DaoException {
-        try(Connection connection = pool.takeConnection();
+        try (Connection connection = pool.takeConnection();
                 PreparedStatement statement = connection.prepareStatement(UPDATE_USER)) {
             statement.setString(1, user.getNameFirst());
             statement.setString(2, user.getNameLast());
@@ -97,7 +97,7 @@ public class UserDao extends EntityDao<Integer, User> {
 
     public boolean isRegistered(String email) throws DaoException {
         boolean isRegistered = true;
-        try(Connection connection = pool.takeConnection();
+        try (Connection connection = pool.takeConnection();
                 PreparedStatement statement = connection.prepareStatement(SELECT_BY_EMAIL)) {
             statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();
@@ -115,8 +115,8 @@ public class UserDao extends EntityDao<Integer, User> {
     public User findByEmailAndPassword(String email, String password) throws DaoException {
         User user = null;
 
-        try(Connection connection = pool.takeConnection();
-            PreparedStatement statement = connection.prepareStatement(SELECT_BY_EMAIL_AND_PASSWORD)){
+        try (Connection connection = pool.takeConnection();
+                PreparedStatement statement = connection.prepareStatement(SELECT_BY_EMAIL_AND_PASSWORD)){
             statement.setString(1, email);
             statement.setString(2, password);
             ResultSet resultSet = statement.executeQuery();
@@ -132,8 +132,8 @@ public class UserDao extends EntityDao<Integer, User> {
     }
 
     public void changePassword(User user) throws DaoException {
-        try(Connection connection = pool.takeConnection();
-            PreparedStatement statement = connection.prepareStatement(UPDATE_PASSWORD)) {
+        try (Connection connection = pool.takeConnection();
+                PreparedStatement statement = connection.prepareStatement(UPDATE_PASSWORD)) {
             statement.setString(1, user.getPassword());
             statement.setInt(2, user.getId());
             statement.executeUpdate();

@@ -27,7 +27,7 @@ public class BookDao extends EntityDao<Integer, Book> {
     @Override
     public List<Book> findAll() throws DaoException {
         List<Book> books = new ArrayList<>();
-        try(PreparedStatement statement = connection.prepareStatement(SELECT_ALL);
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_ALL);
                 ResultSet resultSet = statement.executeQuery()) {
             while (resultSet.next()) {
                 Book book = retrieveBook(resultSet);
@@ -43,7 +43,7 @@ public class BookDao extends EntityDao<Integer, Book> {
     @Override
     public Book findById(Integer idBook) throws DaoException {
         Book book = null;
-        try(PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
+        try (PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
             statement.setInt(1, idBook);
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
@@ -65,7 +65,7 @@ public class BookDao extends EntityDao<Integer, Book> {
     @Override
     public Integer create(Book book) throws DaoException {
         int idBook = 0;
-        try(PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement statement = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, book.getTitle());
             statement.setString(2, book.getPublisher());
             statement.setInt(3, book.getNumberCopies());
@@ -84,7 +84,7 @@ public class BookDao extends EntityDao<Integer, Book> {
 
     @Override
     public void update(Book book) throws DaoException {
-        try(PreparedStatement statement = connection.prepareStatement(UPDATE_BOOK_DETAILS)) {
+        try (PreparedStatement statement = connection.prepareStatement(UPDATE_BOOK_DETAILS)) {
             statement.setString(1, book.getTitle());
             statement.setString(2, book.getPublisher());
             statement.setInt(3, book.getNumberCopies());

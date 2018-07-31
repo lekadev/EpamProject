@@ -21,7 +21,7 @@ public class LoginAction implements Action {
         } catch (DaoException e) {
             throw new ActionException();
         }
-        if(user == null ) {
+        if (user == null ) {
             req.getSession().setAttribute(Const.LOGIN_MESSAGE, Const.LOGIN_ERROR);
             return Const.REDIRECT_START_PAGE;
         }

@@ -14,7 +14,7 @@ public class LabelsDao {
 
     private final static Logger logger = Logger.getLogger(LabelsDao.class);
 
-    private final static String SELECT_ALL = "SELECT * FROM library.label JOIN locale USING(id_locale) WHERE name_locale=?";
+    private final static String SELECT_ALL = "SELECT id_label, label, text, id_locale FROM library.label JOIN locale USING(id_locale) WHERE name_locale=?";
 
     private ConnectionPool pool = ConnectionPool.getInstance();
 
@@ -22,7 +22,7 @@ public class LabelsDao {
 
     public Map<String, String> initLabelData(Locale locale) throws DaoException {
         Map<String, String> labels = new HashMap<>();
-        try(Connection connection = pool.takeConnection();
+        try (Connection connection = pool.takeConnection();
                 PreparedStatement statement = connection.prepareStatement(SELECT_ALL)) {
             statement.setString(1, locale.getLanguage());
             ResultSet resultSet = statement.executeQuery();
