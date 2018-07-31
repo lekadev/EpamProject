@@ -17,7 +17,7 @@ public class FormValidator {
                                             FieldValidator.isTextValid(nameLast);
         boolean isPasswordValid = FieldValidator.isPasswordValid(password) &&
                                     FieldValidator.isPasswordValid(passwordRepeated);
-        boolean isPasswordMatch = EqualValidator.isEqualValid(password, passwordRepeated);
+        boolean isPasswordMatch = FieldValidator.isEqualValid(password, passwordRepeated);
         if (!isFieldsValid) {
             req.getSession().setAttribute(Const.REGISTRATION_MESSAGE, Const.TEXT_INPUT_ERROR);
         } else if (!isPasswordValid) {
@@ -50,7 +50,7 @@ public class FormValidator {
         if (!isFieldsValid) {
             req.getSession().setAttribute(Const.PASSWORD_UPDATE_MESSAGE, Const.PASSWORD_INVALID_ERROR);
         }
-        boolean isPasswordsMatch = EqualValidator.isEqualValid(password, passwordRepeated);
+        boolean isPasswordsMatch = FieldValidator.isEqualValid(password, passwordRepeated);
         if (!isPasswordsMatch) {
             req.getSession().setAttribute(Const.PASSWORD_UPDATE_MESSAGE, Const.PASSWORD_MATCH_ERROR);
         }
