@@ -2,7 +2,7 @@
 
 Web-based library management system
 
-Instructions to run the projec: 
+Instructions to run the project: 
 
 1. Download and install jdk 1.8, IntelliJ Idea (ultimate edition), Git, Apache Tomcat, MySQL
 2. Clone project: git clone https://github.com/laqaliyeva/EpamProject.git
