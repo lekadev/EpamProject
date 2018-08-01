@@ -14,7 +14,8 @@ Instructions to run the project:
 8. To run with Tomcat: in Idea, add Tomcat run configuration: Run -> Edit Configurations -> Add New Configuration -> Tomcat Server (Local) -> configure path to server -> configure project war artefact
 9. Run 
 10. To test the system use following data: 
-        librarian: email  - kaliyeva.laura@gmail.com 
-                    password - 123
-        reader: email - a.kaliyeva@mail.ru
-                password - 123
+for librarian: 
+email  - kaliyeva.laura@gmail.com 
+password - 123
+for reader: email - a.kaliyeva@mail.ru 
+password - 123
