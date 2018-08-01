@@ -13,3 +13,8 @@ Instructions to run the projec:
 7. Configure path to log files by changing "log" variable in property file main/resources/log4j.properties, if needed
 8. To run with Tomcat: in Idea, add Tomcat run configuration: Run -> Edit Configurations -> Add New Configuration -> Tomcat Server (Local) -> configure path to server -> configure project war artefact
 9. Run 
+10. To test the system use following data: 
+        librarian: email  - kaliyeva.laura@gmail.com 
+                    password - 123
+        reader: email - a.kaliyeva@mail.ru
+                password - 123
