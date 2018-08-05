@@ -15,8 +15,7 @@ CREATE  TABLE `library`.`user` (
   `name_first` VARCHAR(45) NOT NULL ,
   `name_last` VARCHAR(45) NOT NULL ,
   `date_registered` DATE NOT NULL ,
-  PRIMARY KEY (`id_user`))
-DEFAULT CHARACTER SET = ascii;
+  PRIMARY KEY (`id_user`));
 
 
 -- -------------------------------------------------------------------------

@@ -8,7 +8,7 @@ Instructions to run the project:
 2. Clone project: git clone https://github.com/laqaliyeva/EpamProject.git
 3. Configure project sdk: jdk1.8
 4. Configure project as Maven project: in Idea, right click on project module -> Add framework support -> Maven
-5. Prepare database by running script library.sql
+5. Prepare database by running script schema-mysql.sql
 6. Configure connection with database by changing property file main/resources/database.properties, if needed
 7. Configure path to log files by changing "log" variable in property file main/resources/log4j.properties, if needed
 8. To run with Tomcat: in Idea, add Tomcat run configuration: Run -> Edit Configurations -> Add New Configuration -> Tomcat Server (Local) -> configure path to server -> configure project war artefact
