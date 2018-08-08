@@ -14,7 +14,7 @@ import com.epam.mylibrary.dao.exception.DaoException;
 
 public class BookDaoTest {
 
-    private static Book book;
+    /*private static Book book;
     private static BookDao dao;
     private static Random random;
 
@@ -102,5 +102,5 @@ public class BookDaoTest {
         foundBook = dao.findById(book.getId());
         assertThat(foundBook, is(not(book)));
         book = foundBook;
-    }
+    }*/
 }

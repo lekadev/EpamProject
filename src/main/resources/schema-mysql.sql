@@ -43,12 +43,12 @@ CREATE  TABLE `library`.`label` (
 -- -------------------------------------------------------------------------
 
 ALTER TABLE `library`.`label`
-  ADD CONSTRAINT `fk_lable_locale`
+  ADD CONSTRAINT `fk_label_locale`
   FOREIGN KEY (`id_locale` )
   REFERENCES `library`.`locale` (`id_locale` )
   ON DELETE CASCADE
   ON UPDATE CASCADE
-, ADD INDEX `fk_lable_locale_idx` (`id_locale` ASC) ;
+, ADD INDEX `fk_label_locale_idx` (`id_locale` ASC) ;
 
 
 -- -------------------------------------------------------------------------

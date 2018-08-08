@@ -16,7 +16,7 @@ import com.epam.mylibrary.dao.exception.DaoException;
 
 public class UserDaoTest {
 
-    private static User user;
+    /*private static User user;
     private static UserDao dao;
 
     @BeforeClass
@@ -136,5 +136,5 @@ public class UserDaoTest {
         foundUser = dao.findById(user.getId());
         assertThat(foundUser, is(not(user)));
         user = foundUser;
-    }
+    }*/
 }
