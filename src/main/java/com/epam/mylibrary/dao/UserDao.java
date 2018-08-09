@@ -114,7 +114,6 @@ public class UserDao extends EntityDao<Integer, User> {
 
     public User findByEmailAndPassword(String email, String password) throws DaoException {
         User user = null;
-
         try (Connection connection = pool.takeConnection();
                 PreparedStatement statement = connection.prepareStatement(SELECT_BY_EMAIL_AND_PASSWORD)){
             statement.setString(1, email);

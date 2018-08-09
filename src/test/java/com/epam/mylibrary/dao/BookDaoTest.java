@@ -96,7 +96,7 @@ public class BookDaoTest {
     public void findByIdShouldReturnBook() throws Exception {
         Book foundBook = dao.findById(someId);
         verify(connection, times(1)).prepareStatement(anyString());
-        verify(statement, times(1)).setInt(anyInt(), eq(someId));
+        verify(statement, times(1)).setInt(1, someId);
         verify(statement, times(1)).executeQuery();
         verify(resultSet, times(1)).next();
         verify(resultSet, times(1)).getInt(Const.BOOK_ID);
