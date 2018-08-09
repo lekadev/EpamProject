@@ -146,7 +146,7 @@ public class AuthorDaoTest {
     }
 
     @Test
-    public void createShouldThrowExceptionWhenGivenEmptyObject() throws Exception {
+    public void createShouldThrowExceptionWhenGivenEmptyAuthor() throws Exception {
         thrown.expect(DaoException.class);
         dao.create(new Author());
     }
