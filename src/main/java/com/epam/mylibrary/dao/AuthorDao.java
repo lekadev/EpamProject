@@ -55,7 +55,7 @@ public class AuthorDao extends EntityDao<Integer, Author> {
                 PreparedStatement statement = connection.prepareStatement(SELECT_BY_ID)) {
             statement.setInt(1, idAuthor);
             ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
+            if (resultSet.next()) {
                 author = retrieveAuthor(resultSet);
             }
             resultSet.close();
