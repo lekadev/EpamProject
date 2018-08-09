@@ -1,9 +1,6 @@
 package com.epam.mylibrary.dao;
 
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import static org.hamcrest.Matchers.*;
 import org.junit.rules.ExpectedException;
