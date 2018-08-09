@@ -103,11 +103,10 @@ public class AuthorDaoTest {
         Author foundAuthor = dao.findById(someId);
         verify(pool, times(1)).takeConnection();
         verify(connection, times(1)).prepareStatement(anyString());
-        verify(statement, times(1)).setInt(anyInt(), anyInt());
+        verify(statement, times(1)).setInt(anyInt(), someId);
         verify(statement, times(1)).executeQuery();
         verify(resultSet, times(2)).next();
-        verify(resultSet, times(1)).getString(Const.AUTHOR_NAME_FIRST);
-        verify(resultSet, times(1)).getString(Const.AUTHOR_NAME_LAST);
+        verify(resultSet, times(2)).getString(anyString());
         assertThat(foundAuthor, is(notNullValue()));
         assertThat(foundAuthor.getId(), is(author.getId()));
         assertThat(foundAuthor, is(author));
