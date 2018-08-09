@@ -71,7 +71,7 @@ public class UserDao extends EntityDao<Integer, User> {
             statement.executeUpdate();
             ResultSet generatedKey = statement.getGeneratedKeys();
             if (generatedKey.next()) {
-                idUser = generatedKey.getInt(1);
+                idUser = generatedKey.getInt(Const.USER_ID);
             }
             generatedKey.close();
         } catch (SQLException e) {
