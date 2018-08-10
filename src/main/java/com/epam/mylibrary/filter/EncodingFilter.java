@@ -12,11 +12,8 @@ public class EncodingFilter  implements Filter {
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        String currentEncoding = request.getCharacterEncoding();
-        if (currentEncoding != null && !currentEncoding.equals(DEFAULT_ENCODING)) {
-            request.setCharacterEncoding(DEFAULT_ENCODING);
-            response.setCharacterEncoding(DEFAULT_ENCODING);
-        }
+        request.setCharacterEncoding(DEFAULT_ENCODING);
+        response.setCharacterEncoding(DEFAULT_ENCODING);
         chain.doFilter(request, response);
     }
 

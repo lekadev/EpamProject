@@ -72,7 +72,7 @@ public class BookDao extends EntityDao<Integer, Book> {
             statement.executeUpdate();
             ResultSet generatedKey = statement.getGeneratedKeys();
             if (generatedKey.next()) {
-                idBook = generatedKey.getInt(Const.BOOK_ID);
+                idBook = generatedKey.getInt(1);
             }
             generatedKey.close();
         } catch (SQLException e) {

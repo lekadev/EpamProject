@@ -69,6 +69,7 @@ public class BookDaoTest {
         when(statement.executeBatch()).thenReturn(null);
         doNothing().when(statement).close();
         when(resultSet.next()).thenReturn(true, false);
+        when(resultSet.getInt(1)).thenReturn(book.getId());
         when(resultSet.getInt(Const.BOOK_ID)).thenReturn(book.getId());
         when(resultSet.getString(Const.BOOK_TITLE)).thenReturn(book.getTitle());
         when(resultSet.getString(Const.BOOK_PUBLISHER)).thenReturn(book.getPublisher());
@@ -136,7 +137,7 @@ public class BookDaoTest {
         verify(statement, times(1)).executeUpdate();
         verify(statement, times(1)).getGeneratedKeys();
         verify(resultSet, times(1)).next();
-        verify(resultSet, times(1)).getInt(Const.BOOK_ID);
+        verify(resultSet, times(1)).getInt(1);
         assertThat(generatedId, is(book.getId()));
     }
 

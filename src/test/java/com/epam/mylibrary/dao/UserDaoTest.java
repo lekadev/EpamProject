@@ -76,6 +76,7 @@ public class UserDaoTest {
         when(statement.executeBatch()).thenReturn(null);
         doNothing().when(statement).close();
         when(resultSet.next()).thenReturn(true, false);
+        when(resultSet.getInt(1)).thenReturn(user.getId());
         when(resultSet.getInt(Const.USER_ID)).thenReturn(user.getId());
         when(resultSet.getString(Const.USER_EMAIL)).thenReturn(user.getEmail());
         when(resultSet.getString(Const.USER_PASSWORD)).thenReturn(user.getPassword());
@@ -142,7 +143,7 @@ public class UserDaoTest {
         verify(statement, times(1)).executeUpdate();
         verify(statement, times(1)).getGeneratedKeys();
         verify(resultSet, times(1)).next();
-        verify(resultSet, times(1)).getInt(Const.USER_ID);
+        verify(resultSet, times(1)).getInt(1);
         assertThat(generatedId, is(user.getId()));
     }
 

@@ -81,7 +81,7 @@ public class AuthorDao extends EntityDao<Integer, Author> {
             statement.executeUpdate();
             ResultSet generatedKey = statement.getGeneratedKeys();
             if (generatedKey.next()) {
-                idAuthor = generatedKey.getInt(Const.AUTHOR_ID);
+                idAuthor = generatedKey.getInt(1);
             }
             generatedKey.close();
         } catch (SQLException e) {
